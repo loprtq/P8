@@ -1,0 +1,99 @@
+% Preamble/Packages.tex
+% --------------------------------------------------------------------------------
+% Packages used in the report
+\newcommand*{\AddEverypageHook}[1]{%
+  \AddToHook{shipout/background}{\put(1in,-1in){#1}}}
+\newcommand*{\AddThispageHook}[1]{%
+  \AddToHookNext{shipout/background}{\put(1in,-1in){#1}}} 
+\disable@package@load{everypage}{}
+
+
+% Project-specific packages ------------------------------------------------------
+\usepackage{textgreek}
+\usepackage{listingsutf8}
+\usepackage[outline]{contour}
+\usepackage{listofitems}
+
+
+% Base-packages ------------------------------------------------------------------
+\usepackage[T1]{fontenc}            % Show symbols and characters
+\usepackage[utf8]{inputenc}         % Read symbols and characters
+\usepackage{babel}                  % Language settings
+\usepackage[square]{natbib}         % References and citations
+\usepackage[hyphens]{url}           % Links
+\usepackage{hyperref}               % For links and references
+\usepackage{xpatch}                 % For patching macros
+\usepackage{silence}                % Remove errors
+
+
+
+
+
+% Math packages ------------------------------------------------------------------
+\usepackage{mathtools}              % Math commands and environments
+\usepackage{amssymb}                % Additional math symbols
+\usepackage{amsthm}                 % Theorem environments
+\usepackage{bbm}                    % Improved 'blackboard bold' styling
+\usepackage{bm}                     % Improved bold faces for math symbols
+\usepackage{relsize}                % Change size of math
+
+
+
+
+
+% Environment packages -----------------------------------------------------------
+\usepackage{mdframed}               % Support for framed environments
+\usepackage{multicol}               % Support for \multicolumn
+\usepackage{multirow}               % Support for \multirow
+\usepackage{enumerate}              % Support for numerated environments
+\usepackage[chapter]{algorithm}     % Algorithms 
+\usepackage[noend]{algpseudocode}   % Pseudo-code
+\usepackage{listings}               % Show source-code
+
+
+
+
+
+% Figure packages ----------------------------------------------------------------
+\usepackage[dvipsnames]{xcolor}     % For colored text
+\usepackage{graphicx}               % Handling pictures
+\usepackage{booktabs}               % Better tables
+\usepackage{caption}                % Better captions
+\usepackage{subcaption}             % Grouping multiple pictures
+\usepackage{tikz}                   % Generate vector-figures
+
+
+
+
+
+% Styling-pakker -----------------------------------------------------------------
+\usepackage{blindtext}              % For writing text
+\usepackage{color}                  % Coloring text/objects
+\usepackage{nomencl}                % Nomenclature
+\usepackage{microtype}              % Text adjustments
+\usepackage{emptypage}              % Remove page numbers on empty pages
+\usepackage{fancyhdr}               % Create better header and footer
+\usepackage{titlesec}               % Better headings
+\usepackage[margin=1in]{geometry}   % Change page margin
+\usepackage[toc,page]{appendix}     % Better Appendices 
+\usepackage[some]{background}       % For background images
+\usepackage{pageslts}               % See PDF page numbering
+\usepackage{calc}                   % Arithmetic in Latex
+
+
+
+
+
+% Fonts --------------------------------------------------------------------------
+% http://www.tug.org/pracjourn/2006-1/hartke/hartke.pdf
+% http://www.tug.dk/FontCatalogue/
+\usepackage{fourier}                % Adobe Utopia as primary font
+\usepackage{DejaVuSansMono}         % DejaVu Sans Mono for sourcecode etc.
+
+
+
+
+
+% Third-party packages -----------------------------------------------------------
+% AAUTitlepage is a third-party package with macros for the title page
+\WarningsOff*\usepackage{Preamble/External/AAUTitlepage}\WarningsOn

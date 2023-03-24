@@ -1,0 +1,302 @@
+% Preamble/Configurations.tex
+% -------------------------------------------------------------------------------
+% Configurations for the report
+
+
+% Basic configurations ----------------------------------------------------------
+\raggedbottom
+\hfuzz=5.002pt\hbadness 9999
+\vfuzz=5.002pt\vbadness 9999
+
+
+% Nomenclature ------------------------------------------------------------------
+\renewcommand{\nomname}{Nomenclature}                   % Title name
+\setlength{\nomlabelwidth}{1.5em}                       % Text to symbol distance
+
+
+
+
+
+% Custom colors -----------------------------------------------------------------
+% Official AAU colors
+%https://www.design.aau.dk/om-aau-design/Farver/
+\definecolor{AAUblue1}{RGB}{ 33, 26, 82}
+\definecolor{AAUblue2}{RGB}{ 89, 79,191}
+\definecolor{AAUgrey1}{RGB}{ 84, 97,110}
+\definecolor{AAUgrey2}{RGB}{104,119,132}
+\definecolor{AAUgrey3}{RGB}{162,172,182}
+\definecolor{AAUgrey4}{RGB}{222,223,226}
+\definecolor{AAUgrey5}{RGB}{241,242,243}
+\definecolor{AAUgrey6}{RGB}{248,248,249}
+\definecolor{AAUgreen}{RGB}{157,187, 29}
+\definecolor{AAUteal} {RGB}{ 94,150,149}
+\definecolor{AAUred}  {RGB}{223,103, 82}
+
+
+
+
+
+% Header and footer -------------------------------------------------------------
+% http://mirrors.dotsrc.org/ctan/macros/latex/contrib/fancyhdr/fancyhdr.pdf
+\setlength{\headheight}{15pt}                           % Headheight
+
+\fancyhead{}                                            % Clears header
+\fancyhead[LE,RO]{Group \projectgroup}                  % Left on even, right on odd pages
+\fancyhead[RE]{\leftmark}                               % Right on even pages
+\fancyhead[LO]{\rightmark}                              % Left on odd pages
+
+\fancyfoot{}                                            % Clears footer
+\fancyfoot[CE,CO]{\thepage}                             % Centered page numbers
+\pagestyle{fancy}                                       % Activates fancy pages
+
+
+
+
+
+% Heading -----------------------------------------------------------------------
+% http://mirrors.dotsrc.org/ctan/macros/latex/contrib/titlesec/titlesec.pdf
+% Dele skrives på to linjer
+\titleformat{\part}[display]
+ {\Huge\bfseries\color{AAUblue1}\filcenter}
+ {\huge\partname{} \thepart}
+ {0em}
+ {}
+ 
+\titlespacing*{\chapter}{0pt}{0.25em}{1em}[0in]
+\newlength\Tlen\setlength\Tlen{\evensidemargin+0.5in+\hoffset}
+\titleformat{\chapter} % Title with margin numbering
+  {\huge\color{AAUblue1}\bfseries}
+  {\llap{\hspace*{-\Tlen}\thechapter\hfill}}
+  {0em}
+  {\huge\bfseries\color{AAUblue1}}
+% \titleformat{\chapter}[hang] % Title with normal numbering
+%  {\huge\bfseries\color{AAUblue1}}
+%  {\thechapter\hspace{0.75em}\textcolor{AAUgrey3}{$\mid$}}
+%  {0.75em}
+%  {\huge\bfseries\color{AAUblue1}}
+
+\titleformat{\section}[hang]
+ {\Large\bfseries}
+ {\thesection}
+ {1em}
+ {\Large\bfseries}
+ 
+\titleformat{\subsection}[hang]
+ {\large\bfseries}
+ {\thesubsection}
+ {1em}
+ {\large\bfseries}
+
+% Adjust title and table of contents with regards to the appendix
+\renewcommand{\appendixname}{Appendix}
+\renewcommand{\appendixtocname}{Appendices}
+\renewcommand{\appendixpagename}{\textcolor{AAUblue1}{Appendices}}
+\xpatchcmd{\addappheadtotoc}{{chapter}}{{part}}{}{}
+
+
+
+
+
+% Figure settings ---------------------------------------------------------------
+% http://mirrors.dotsrc.org/ctan/macros/latex/contrib/caption/caption-eng.pdf
+\captionsetup{font=it,labelfont={bf,sc}}            % Italic text and bold label
+
+% https://tex.stackexchange.com/q/42611
+\usetikzlibrary{arrows.meta}                        % Different arrowheads
+\usetikzlibrary{calc}                               % Better calculations
+\usetikzlibrary{positioning}                        % Better positioning
+
+% Predefined styles
+\tikzstyle{point} = [fill,shape=circle,minimum size=3pt,inner sep=0pt]
+\tikzstyle{edge}  = [fill=white,midway,inner sep=1pt]
+
+
+
+% Algorithms --------------------------------------------------------------------
+% Settings for algorithms
+\floatname{algorithm}{Algorithm}
+\renewcommand{\listalgorithmname}{List of Algorithms}
+
+
+
+
+
+% Kildekode ---------------------------------------------------------------------
+% Syntax highlighting for Python-code
+% https://en.wikibooks.org/wiki/LaTeX/Source_Code_Listings
+\lstdefinestyle{custompy}{
+    belowcaptionskip=\baselineskip,
+    breaklines=true,
+    mathescape=true,
+    escapeinside={@}{@},
+    inputencoding=utf8,
+    extendedchars=true,
+    language=Python,
+    showstringspaces=false,
+    basicstyle=\footnotesize\ttfamily,
+    keywordstyle=\bfseries\color{AAUblue1},
+    commentstyle=\itshape\color{AAUgrey3},
+    identifierstyle=\color{AAUblue2},
+    stringstyle=\color{AAUteal},
+}
+\lstdefinestyle{customR}{
+    belowcaptionskip=\baselineskip,
+    breaklines=true,
+    mathescape=true,
+    escapeinside={@}{@},
+    inputencoding=utf8,
+    extendedchars=true,
+    language=R,
+    showstringspaces=false,
+    basicstyle=\footnotesize\ttfamily,
+    keywordstyle=\bfseries\color{AAUblue2},
+    commentstyle=\itshape\color{AAUgrey3},
+    identifierstyle=\color{AAUblue1},
+    stringstyle=\color{AAUteal},
+}
+\lstdefinestyle{customJ}{
+    belowcaptionskip=\baselineskip,
+    breaklines=true,
+    mathescape=true,
+    escapeinside={@}{@},
+    inputencoding=utf8,
+    extendedchars=true,
+    language=Julia,
+    showstringspaces=false,
+    basicstyle=\footnotesize\ttfamily,
+    keywordstyle=\bfseries\color{AAUblue2},
+    commentstyle=\itshape\color{AAUgrey3},
+    identifierstyle=\color{AAUblue1},
+    stringstyle=\color{AAUteal},
+}
+
+\lstset{style=custompy, captionpos=b, frame=lines, rulecolor=\color{AAUblue1}}
+\renewcommand{\lstlistingname}{Listing}
+\providecommand*{\listingautorefname}{Listing}
+\renewcommand{\lstlistlistingname}{List of Listings}
+
+
+
+
+
+% Setting up autoref ------------------------------------------------------------
+\def\partautorefname{Part}
+\def\chapterautorefname{Chapter}
+\def\sectionautorefname{Section}
+\def\subsectionautorefname{Subsection}
+
+\def\figureautorefname{Figure}
+\def\tableautorefname{Table}
+\def\algorithmautorefname{Algorithm}
+\def\lstinputlistingautorefname{Listing}
+
+\def\defiautorefname{Definition}
+\def\theoautorefname{Theorem}
+\def\lemmautorefname{Lemma}
+\def\corolautorefname{Corollary}
+\def\examautorefname{Example}
+\def\propoautorefname{Proposition}
+
+
+
+
+
+% Custom environments -----------------------------------------------------------
+% Unifies the counters in the report
+\makeatletter\let\c@lemm    = \c@theo\makeatother
+\makeatletter\let\c@corol   = \c@theo\makeatother
+\makeatletter\let\c@defi    = \c@theo\makeatother
+\makeatletter\let\c@exam    = \c@theo\makeatother
+\makeatletter\let\c@propo   = \c@theo\makeatother
+
+% Environment for theorems, propositions, corollary
+\newmdenv[
+    leftmargin          = 0em,
+    innerleftmargin     = 1em,
+    innertopmargin      = 0.5em,
+    innerbottommargin   = 1em,
+    innerrightmargin    = 1em,
+    rightmargin         = 0em,
+    linewidth           = 3pt,
+    topline             = false,
+    rightline           = false,
+    bottomline          = false,
+    skipabove           = 0.75em,
+    skipbelow           = 0.75em,
+    nobreak             = true,
+]{thmenv}
+
+% Environment for definitions
+\newmdenv[
+    leftmargin          = 0em,
+    innerleftmargin     = 1em,
+    innertopmargin      = 0.5em,
+    innerbottommargin   = 1em,
+    innerrightmargin    = 1em,
+    skipabove           = 0.75em,
+    skipbelow           = 0.75em,
+    rightmargin         = 0em,
+    linewidth           = 3pt,
+    linecolor           = AAUblue1,
+    topline             = false,
+    rightline           = false,
+    bottomline          = false,
+    backgroundcolor     = AAUgrey5,
+    nobreak             = true,
+]{defnenv}
+  
+% Environment for examples
+\newmdenv[
+    leftmargin          = 0em,
+    innerleftmargin     = 1em,
+    innertopmargin      = 0em,
+    innerbottommargin   = 1em,
+    innerrightmargin    = 1em,
+    rightmargin         = 0em,
+    skipabove           = 1.5em,
+    skipbelow           = 1.5em,
+    linewidth           = 1pt,
+    linecolor           = AAUblue1,
+    topline             = true,
+    rightline           = false,
+    leftline            = false,
+    bottomline          = true,
+    % nobreak             = true,
+    backgroundcolor     = AAUgrey6,
+    frametitle          = {}
+]{exmpenv}
+
+
+% Links and references  ---------------------------------------------------------
+% https://tex.stackexchange.com/questions/50747/options-for-appearance-of-links-in-hyperref
+\newcommand{\email}[1]{$\left<\right.$\href{mailto:#1}{#1}$\left.\right>$}
+\PassOptionsToPackage{hyphens}{url}
+\renewcommand{\UrlFont}{\itshape\ttfamily\normalfont}
+\hypersetup{
+    colorlinks  = true,                             % 
+    breaklinks  = true,                             % 
+    linkcolor   = black,                            % Black links
+    filecolor   = black,                            % Black file references
+    citecolor   = black,                            % Black citations
+    urlcolor    = AAUblue2                          % AAUblue2 urls
+}
+
+
+
+
+
+% Warnings ----------------------------------------------------------------------
+\WarningsOff[natbib]
+\WarningsOff[background]
+\WarningsOff[everypage]
+
+
+% PDF metadata ------------------------------------------------------------------
+\hypersetup{
+    pdftitle    = {\projecttitle},                  
+    pdfsubject  = {\projecttheme},                  
+    pdfkeywords = {Jonas Aldous}{\projecttheme, \projecttitle, \projectsubtitle, English, Aalborg University, Aalborg Universitet, Matematik-Økonomi, Mathematics-Economics, \projectnumber, \projectperiod},
+    pdfauthor   = {Jonas Aldous},     
+    pdfproducer = {Jonas Aldous},     
+    pdfstartview= {FitH},                           % Fits the width of the page to the window
+}

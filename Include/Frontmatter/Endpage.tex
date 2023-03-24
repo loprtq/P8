@@ -1,0 +1,22 @@
+% Include/Frontmatter/Endpage.tex
+% ------------------------------------------------------------------------------
+% Is the reports end page
+\thispagestyle{empty}\addtocounter{page}{-1}
+
+\ifodd\theCurrentPage {% Below is what happens if it is odd
+ \cleardoublepage\thispagestyle{empty}\addtocounter{page}{-1}
+}\else {% Below is what happens if it is even
+ 
+}\fi
+ 
+\backgroundsetup{
+  scale = 1,
+  angle = 0,
+  opacity = 1,
+  contents = {
+    \scalebox{-1}[1]{\includegraphics[width=\paperwidth,height=\paperheight]{Figures/AAU/waves.pdf}}
+  }
+}
+
+\BgThispage
+\begin{tikzpicture}\end{tikzpicture}

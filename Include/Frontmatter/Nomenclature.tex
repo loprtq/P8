@@ -1,0 +1,27 @@
+% Include/Frontmatter/Nomenclature.tex 
+% --------------------------------------------------------------------------------
+% A nomenclature describes the symbols used within the report
+\pdfbookmark[0]{Nomenclature}{nomenclature}
+
+
+\makenomenclature
+\renewcommand{\nompreamble}{
+The nomenclature describes several symbols and functions that will be used within the report.
+}
+%\renewcommand{\nompreamble}{
+% The nomenclature describes several symbols that will be used within the report.
+% \begin{multicols*}{2}}
+%\renewcommand{\nompostamble}{\end{multicols*}}
+
+\begingroup
+\makeatletter
+\@twosidefalse
+\makeatother
+
+
+\printnomenclature\label{Nomenclature}
+% https://www.overleaf.com/learn/latex/nomenclatures
+
+% \nomenclature[Category]{Symbol}{Description}
+
+\endgroup

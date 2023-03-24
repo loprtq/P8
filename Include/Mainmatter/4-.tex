@@ -1,0 +1,17 @@
+\chapter{Application}\label{Ch.4}
+
+In this chapter we will use the theory from the former chapters to derive the risk neutral density function for a chosen option on an underlying stock. First a neural network will be constructed to estimate a function for the implied volatility, which derivatives can be estimated by using finite difference. 
+
+All data processing can be found in ....github....
+
+\subsection{Data}
+We have chosen to work with the stock GOOG and wants to derive the risk neutral density function for the call option of this underlying stock. First we have the 16th of February retrieved data for this option including among other things prices of the option, stock prices, strike prices and time to maturity for options with maturity time in the period from 17-02-2023 to 20-06-2025. Further we have calculated the implied volatility for all of these option prices using the function in R "EuropeanOptionImpliedVolatility", which will be used to train and test the neural network. As expected when plotting the implied volatility with respect to strike prices and time to maturity the mentioded implied volatility smile is only seen when close to maturity. Hence, we exclude all options with time to maturity larger than 0.1, that is approximately 36 days. The below figure illustrates the implied volatility smile constructed by our data, where it is clear that the volatility smile is getting more distinct closer to maturity. 
+
+\textbf{FIN FIGUR}
+
+\section{Neural network for implied volatility}
+For the contruction of the neural network the package "tensorflow" is used along with the "keras" package. After sorting the data there are approximately 60.000 point left which should be split in three batches, training, validation and test data sets. 
+
+
+
+

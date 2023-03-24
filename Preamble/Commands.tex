@@ -1,0 +1,145 @@
+% Preamble/Commands.tex
+% -------------------------------------------------------------------------------
+% Commands and macros for the report
+
+% Added commands ----------------------------------------------------------------
+\newcommand{\VE}{\vphantom{E^E}}
+\renewcommand{\hat}{\widehat}                           % Better hats
+\renewcommand{\tilde}[1]{\widetilde{#1}}                % Better tilde
+\renewcommand{\Tilde}[1]{\widetilde{#1}}                % Better tilde
+\renewcommand{\epsilon}{\varepsilon}                    % Better epsilon
+\renewcommand{\sim}{\thicksim}                          % Better sim
+
+% Calculus
+\newcommand{\e}{\mathrm{e}}                             % Eulers number
+\newcommand{\ind}{\mathbbm{1}}                          % Indicator-function
+\renewcommand{\d}{\mathrm{d}}                           % For integrals
+\newcommand{\re}[1]{\mathrm{Re}\left(\VE#1\right)}      % Real part
+\newcommand{\im}[1]{\mathrm{Im}\left(\VE#1\right)}      % Imaginary part
+
+% Linear algebra
+\renewcommand{\vec}[1]{\bm{#1}}                         % Bold vectors
+\newcommand{\hvec}[1]{\hat{\vec{#1}}}                   % Bold hat vectors
+\newcommand{\Det}[1]{\mathrm{det}\left(\VE#1\right)}    % Determinant
+\newcommand{\Tr}[1]{\mathrm{Tr}\left(\VE#1\right)}      % Trace
+\newcommand{\inner}[2]{\langle\VE#1,#2\rangle}          % Inner product
+\newcommand{\Span}[1]{\mathrm{span}\left(\VE#1\right)}  % Span
+\newcommand{\range}[1]{\mathrm{range}\left(\VE#1\right)}% Range
+\newcommand{\Dim}[1]{\mathrm{dim}\left(\VE#1\right)}    % Dimension
+\newcommand{\norm}[1]{\left\|\VE#1\right\|}             % Norm
+
+% Probability
+\renewcommand{\P}[1]{\mathbb{P}\left(\VE#1\right)}      % Probability function
+\newcommand{\E}[2][]{\mathbb{E}_{#1}\left[\VE#2\right]} % Expected value
+\newcommand{\Var}[1]{\mathrm{Var}\left[\VE#1\right]}    % Variance
+\newcommand{\Cov}[1]{\mathrm{Cov}\left[\VE#1\right]}    % Covariance
+\newcommand{\Cor}[1]{\mathrm{Cor}\left[\VE#1\right]}    % Correlation
+
+% Time Series Analysis
+\newcommand{\wn}[1]{\mathrm{wn}\left(\VE#1\right)}      % White noise
+\newcommand{\AR}[1]{\mathrm{AR}\left(\VE#1\right)}      % Autoregressive
+\newcommand{\ARMA}[1]{\mathrm{ARMA}\left(\VE#1\right)}  % Autoregressive moving average
+\newcommand{\VAR}[1]{\mathrm{VAR}\left(\VE#1\right)}    % Vector Autoregressive
+\newcommand{\MA}[1]{\mathrm{MA}\left(\VE#1\right)}      % Moving Average
+
+% Finance
+\newcommand{\CO}[1]{\mathrm{C}\left(\VE#1\right)}      % Call option
+\newcommand{\PO}[1]{\mathrm{P}\left(\VE#1\right)}      % Put Option
+\newcommand{\IV}[2][]{\mathrm{IV}_{#1}\left(\VE#2\right)}      % Implied Volatility
+
+
+% Mathematical symbols ----------------------------------------------------------
+\newcommand{\N}{\mathbb{N}}                             % Natural numbers
+\newcommand{\Z}{\mathbb{Z}}                             % Integers
+\newcommand{\Q}{\mathbb{Q}}                             % Rational numbers
+\newcommand{\R}{\mathbb{R}}                             % Real numbers
+\newcommand{\C}{\mathbb{C}}                             % Complex numbers
+\newcommand{\F}{\mathbb{F}}                             % Complex and real numbers
+
+\newcommand{\bigO}{\mathcal{O}}                         % Big O-notation
+\DeclareMathAlphabet{\pazocal}{OMS}{zplm}{m}{n}         % Use other math format
+
+
+
+
+
+
+% Theorems, definitions etc. ----------------------------------------------------
+% http://www.ctex.org/documents/packages/math/amsthdoc.pdf
+\newtheoremstyle{Thm}
+  {0.5em}{0em}{\itshape}{}{\bfseries}{.}{\newline}
+  {\thmname{#1}\,\thmnumber{#2\ifx#3\empty\else:\fi}\ifx#3\empty\else\,\,\fi\thmnote{#3}}
+\theoremstyle{Thm}                                    % Bold title, italic body
+\newtheorem{theo}{Theorem}[chapter]
+\newenvironment{thm}[1]
+    {\begin{thmenv}\begin{theo}#1}{\end{theo}\end{thmenv}}
+ 
+\newtheorem{lemm}{Lemma}[chapter]
+\newenvironment{lem}[1]
+    {\begin{thmenv}\begin{lemm}#1}{\end{lemm}\end{thmenv}}
+    
+\newtheorem{propo}{Proposition}[chapter]            
+\newenvironment{prop}[1]
+    {\begin{thmenv}\begin{propo}#1}{\end{propo}\end{thmenv}}
+    
+\newtheorem{corol}{Corollary}[chapter]
+\newenvironment{coro}[1]
+    {\begin{thmenv}\begin{corol}#1}{\end{corol}\end{thmenv}}
+
+\newtheoremstyle{Defn}
+  {0.5em}{0em}{}{}{\bfseries}{.}{\newline}
+  {\thmname{#1}\,\thmnumber{#2\ifx#3\empty\else:\fi}\ifx#3\empty\else\,\,\fi\thmnote{#3}}
+\theoremstyle{Defn}                               % Bold title, normal text
+\newtheorem{defi}{Definition}[chapter]                  
+\newenvironment{defn}[1]
+    {\begin{defnenv}\begin{defi}#1}{\end{defi}\end{defnenv}}
+    
+\newtheorem{exam}{Example}[chapter]
+\newenvironment{exmp}[1]
+    {\begin{exmpenv}\begin{exam}#1}{\end{exam}\end{exmpenv}}
+
+\newtheorem*{remark}{Remark}
+
+\renewcommand\qedsymbol{$\blacksquare$}
+
+
+
+
+
+% Figure-macros -----------------------------------------------------------------
+% Image figure
+\newcommand{\imgfig}[3][0.75]{
+  \begin{figure}[H]
+    \centering
+    \includegraphics[width=#1\textwidth]{#2}
+    \caption{#3}
+    \label{Figures:#2}
+  \end{figure}
+}
+
+% Double image figure
+% https://en.wikibooks.org/wiki/LaTeX/Floats,_Figures_and_Captions#Subfloats
+\newcommand{\dimgfig}[5][0.5]{
+  \ifx\dimgleftwidth\undefined
+    \newlength{\dimgleftwidth}
+    \newlength{\dimgrightwidth}
+  \fi
+  \setlength{\dimgleftwidth}{#1\textwidth-0.02\textwidth}
+  \setlength{\dimgrightwidth}{0.96\textwidth-\dimgleftwidth}
+  \begin{figure}[H]
+    \centering
+    \begin{minipage}[t]{\dimgleftwidth}
+      \centering
+      \includegraphics[width=\linewidth]{#2}
+      \caption{#3}
+      \label{Figures:#2}
+    \end{minipage}
+    \hfill
+    \begin{minipage}[t]{\dimgrightwidth}
+      \centering
+      \includegraphics[width=\linewidth]{#4}
+      \caption{#5}
+      \label{Figures:#4}
+    \end{minipage}
+  \end{figure}
+}

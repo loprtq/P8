@@ -1,0 +1,63 @@
+\documentclass[12pt,a4paper,twoside,openright,english]{book}
+% See https://tex.stackexchange.com/a/36989/118167
+
+\def \projecttitle       {Title}
+\def \projectsubtitle    {Subtitle}
+\def \projecttheme       {Calibration}
+\def \projectdegree      {Mathematics-Economics}
+\def \projectperiod      {Spring Semester of 2023}
+\def \projectnumber      {P8}
+\def \projectgroup       {1.204a}
+\def \projectauthors     {
+    Jonas Benjamin Rose Aldous\\
+    Sandra Helweg Sørensen
+}
+\def \projectsupervisors {
+  Orimar Sauri
+}
+
+\usepackage{aaumath}
+\begin{document}
+% --------------------------------------------------------------------------------
+\frontmatter
+ \include{Include/Frontmatter/Frontpage}
+ \include{Include/Frontmatter/Titlepage}
+ \include{Include/Frontmatter/Preface}
+ \include{Include/Frontmatter/Nomenclature}
+ \include{Include/Frontmatter/Contents}
+
+% --------------------------------------------------------------------------------
+\mainmatter
+% Introduction
+ \include{Include/Mainmatter/1-Introduction}
+
+% 
+ \include{Include/Mainmatter/2-}
+ 
+% 
+ \include{Include/Mainmatter/3-}
+
+% 
+ \include{Include/Mainmatter/4-}
+ 
+% Concluding element
+ \include{Include/Mainmatter/Discussion}
+ \include{Include/Mainmatter/Conclusion}
+
+% --------------------------------------------------------------------------------
+\begin{appendices}
+ \include{Include/Appendices/Appendix-A}
+%  \include{Include/Appendices/Appendix-B}
+\end{appendices}
+
+% --------------------------------------------------------------------------------
+\backmatter
+ \bibliographystyle{apalike}
+ \bibliography{
+  Bibliography/Books,
+  Bibliography/Std-books,
+  Bibliography/Articles,
+  Bibliography/Software
+ }
+ \include{Include/Frontmatter/Endpage}
+\end{document}
