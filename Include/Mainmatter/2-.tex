@@ -32,22 +32,20 @@ For a European call option with price $C$ and pay-off function $\Phi(S_T)=\max(0
 \begin{align}\label{Eq:RND_Calibration}
     C(T,K) &= \exp\left(-rT\right)\int_K^\infty (s-K)f_T^\Q(s)\,\mathrm{d}s.
 \end{align}
-It should be intuitively clear that if $C$ depends on a given set of parameters $\theta$ then $C(T,K)$ could differ, depending on $\theta$. As mentioned previously, the goal of calibration thus becomes determining $f_T^{\Q}$ as it is the only unknown in \eqref{Eq:RND_Calibration}. 
+It should be intuitively clear that if $C$ depends on a given set of parameters $\theta$ then $C(T,K)$ could differ, depending on $\theta$. As mentioned previously, the goal of calibration thus becomes determining $f_T^{\Q}$ as it is the only unknown in \eqref{Eq:RND_Calibration}. Remark that calibration and estimation is not the same
 
 Using \eqref{Eq:RND_Calibration} one obtains that conditioned on $K=s$, then
 \begin{align}\label{Eq:PartialC}
     \frac{\partial^2}{\partial K^2}C(T,K) &= \exp\left(-rT\right)f_T^\Q(s),
 \end{align}
-where $\exp\left(-rT\right)$ is deterministic hence $\frac{\partial^2}{\partial K^2}C(T,K)$ describes $f_T^\Q(s)$. Thus, to determine $f_T^\Q(s)$ one just has to determine $\frac{\partial^2}{\partial K^2}C(T,K)$. 
+where $\exp\left(-rT\right)$ is deterministic hence $\frac{\partial^2}{\partial K^2}C(T,K)$ describes $f_T^\Q(s)$. Thus, to determine $f_T^\Q(s)$ one just has to determine $\frac{\partial^2}{\partial K^2}C(T,K)$.
 
-
-\textbf{Antag at formlen er givet korrekt}\\
-Using \textbf{TBD}, \eqref{Eq:PartialC} can be written as
-\begin{align}\label{Eq:RND_Derivatives}
+Using \citep{1458}, \eqref{Eq:PartialC} can be written as
+\begin{align}\begin{aligned}\label{Eq:RND_Derivatives}
     \frac{\partial^2}{\partial K^2}C(T,K) &= \frac{\partial^2}{\partial K^2}C^{BS}\left(T,K,\IV{T,K}\right)+2\frac{\partial^2}{\partial K\partial\sigma}C^{BS}\left(T,K,\IV{T,K}\right)\frac{\partial}{\partial K}\IV{T,K}\\
     &+\frac{\partial^2}{\partial\sigma^2}C^{BS}\left(T,K,\IV{T,K}\right)\left(\frac{\partial}{\partial K}\IV{T,K}\right)^2+\frac{\partial}{\partial\sigma}C^{BS}\left(T,K,\IV{T,K}\right)\frac{\partial^2}{\partial K^2}\IV{T,K},
-\end{align}
-which in part tells that one only has to determine $\IV{T,K}$ as well as its derivatives to determine $f_T^\Q(s)$. Given that implied volatility, $\IV{T,K}$, does not have a closed form solution it has to be approximated numerically. A fairly well-known method of estimating derivatives is the finite difference method presented in the following section. Moreover, the project will focus on how a neural network can be constructed to estimate the implied volatility (See \autoref{Ch.3}).
+\end{aligned}\end{align}
+which in part tells that one only has to determine $\IV{T,K}$ as well as its derivatives to determine $f_T^\Q(s)$. Given that implied volatility, $\IV{T,K}$, does not have a closed form solution it has to be approximated numerically. A fairly well-known method of estimating derivatives is the finite difference method presented in the following section. Moreover, the project will later on focus on how neural networks are constructed and how they can be used to estimate the implied volatility function, $\mathrm{IV}$ (See \autoref{Ch.3}).
 
 
 \section{Finite Difference}\label{Sec.Finite_Difference}
@@ -57,11 +55,11 @@ The principal of the \emph{finite difference} method is to numerically solve ord
 \end{align*}
 respectively. It should be trivial to see that $\pazocal{O}(\Delta)$ decreases as $\Delta$ decreases, minimising the error of the derivative. The finite difference method also has a submethod called the \emph{central difference} which for a function $f$ is given by
 \begin{align*}
-    \frac{\partial f}{\partial t}=\frac{f(t+\Delta)-f(t-\Delta)}{2\Delta}+\pazocal{O}(\Delta^2)
+    \frac{\partial f}{\partial t} &= \frac{f(t+\Delta)-f(t-\Delta)}{2\Delta}+\pazocal{O}(\Delta^2),
 \end{align*}
-where the error $\pazocal{O}(\Delta^2)$ is smaller than that of the forward- and backward difference. All of these methods can be repeated $k$ times if one has to determine the $k$ derivative of a function $f$.
+where the error $\pazocal{O}(\Delta^2)$ is smaller than that of the forward- and backward difference. All of these methods can be repeated $k$ times if one has to determine the $k$'th derivative of a function $f$.
 
-If $\Delta$ is small and $\partial f/\partial t$ is continuous, then it should be a good approximation. Thus given the a neural network or another function estimating method produces a smooth enough function, finite difference can be easily implemented, especially for lower order derivatives, meaning the derivatives of $\mathrm{IV}$ in \eqref{Eq:RND_Derivatives} can be determined numerically. All this talk about neural networks leads one to look closer at the subject in \autoref{Ch.3}.
+Given $\Delta$ is small and $\partial f/\partial t$ is continuous, then it should be a good approximation. Thus given the a neural network or another function estimating method produces a smooth enough function, finite difference can be easily implemented, especially for lower order derivatives, meaning the derivatives of $\mathrm{IV}$ in \eqref{Eq:RND_Derivatives} can be determined numerically. All this talk about neural networks leads one to look closer at the subject in \autoref{Ch.3}.
 
 
 

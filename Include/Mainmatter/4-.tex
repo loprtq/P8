@@ -10,7 +10,23 @@ We have chosen to work with the stock GOOG and wants to derive the risk neutral 
 \textbf{FIN FIGUR}
 
 \section{Neural network for implied volatility}
-For the contruction of the neural network the package "tensorflow" is used along with the "keras" package. After sorting the data there are approximately 60.000 point left which should be split in three batches, training, validation and test data sets. 
+For the construction of the neural network the package "tensorflow" is used along with the "keras" package. After sorting the data there are approximately 60.000 point left which should be split in three batches, training, validation and test data sets. We've opted to divide the data into three sets, allocating 50\% for training and 25\% each for validation and testing. This method of splitting the data is widely used and hence adopted. The validation set is utilized to identify overfitting by contrasting the model's error on the training set with that of the validation set. If the training set's error is lower than that of the validation set, it may suggest the presence of overfitting.
+
+When constructing the neural network there is not one correct network, but we have chosen the network with the smallest errors measured by MSE and MAE and with no signs of overfitting. In this process we have tried one, two, three and four layered neural networks with different numbers of nodes. In the below figur the MSE og MAE is presented for both the training and validation set for each epoch and networks with different number of layers. 
+
+\textbf{FINE FIGURER}
+
+The results show that networks with three or four hidden layers exhibit signs of overfitting, while the network with two hidden layers has a comparable error rate with no indications of overfitting. The single-layered network shows no signs of overfitting, but its error rate is worse than that of the two-layered network. Therefore, we have selected the neural network with two hidden layers. Additionally, we conducted experiments on varying the number of nodes and dropout rates for networks with one, two, three, and four hidden layers. Based on these experiments, we concluded that the neural network with two hidden layers, each with 10 and 20 nodes, and dropout rates of 40\% and 50\%, respectively, performed the best. In the below figure the volatility surface constructed by the chosen neural network and the test data set is illustrated.
+
+\textbf{ENDNU EN DEJLIG FIGUR}
+
+\textbf{ref til figur} reveals that the volatility surface created by the neural network exhibits a volatility smile, which closely resembles the one observed in the data. Furthermore, we get at MSE and MAE at .... and .... respectively. 
+
+\section{Derivative of the implied volatility}
+Using the neural network presented in the former section we will now construct the derivatives of the implied volatility with respect to the strike price once and twice. This is done as described in \textbf{refsection} by numerically differenciating the implied volatility using finite difference. By implementing this method on the neural network 
+
+ 
+
 
 
 
