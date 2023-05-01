@@ -50,7 +50,7 @@
   \def\yshift{0.4} % shift last node for dots
   
   % INPUT LAYER
-  \foreach \i [evaluate={\c=int(\i==\NI); \y=\NI/2-\i-\c*\yshift; \index=(\i<\NI?int(\i):"n");}]
+  \foreach \i [evaluate={\c=int(\i==\NI); \y=\NI/2-\i-\c*\yshift; \index=(\i<\NI?int(\i):"K_0");}]
               in {1,...,\NI}{ % loop over nodes
     \node[node in,outer sep=0.6] (NI-\i) at (0,\y) {$x_{\index}$};
   }
@@ -67,7 +67,7 @@
     \ifnum\i=1 % high-lighted node
       \node[node hidden]
         (NO-\i) at (1,\y) {$\hat{y}$};
-      \foreach \j [evaluate={\index=(\j<\NI?int(\j):"n");}] in {1,...,\NI}{ % loop over nodes in previous layer
+      \foreach \j [evaluate={\index=(\j<\NI?int(\j):"K_0");}] in {1,...,\NI}{ % loop over nodes in previous layer
         \draw[connect ,white,line width=1.2] (NI-\j) -- (NO-\i);
         \draw[connect arrow] (NI-\j) -- (NO-\i)
           node[pos=0.50] {\contour{white}{$w_{\index}$}};

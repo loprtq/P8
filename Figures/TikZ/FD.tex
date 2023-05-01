@@ -1,0 +1,22 @@
+\begin{figure}
+    \centering
+    \begin{center}
+    \usetikzlibrary {datavisualization.formats.functions}
+    \tikz \datavisualization
+      [scientific axes,
+       all axes={
+         length=7.5cm,
+         grid,
+       },
+       grid layer/.style=, % none, so on top of data (bad idea)
+       visualize as line]
+      data [format=function] {
+        var x : interval [0:10];
+        func y = max(\value x-5, 0);
+      };
+      \end{center}
+    \caption{Finite difference of Black-Scholes.}
+    \label{Figure:Finite_Difference}
+\end{figure}
+
+

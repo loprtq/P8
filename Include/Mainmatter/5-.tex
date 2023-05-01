@@ -1,2 +1,125 @@
-\chapter{}\label{Ch.5}
-This chapter is based upon \citep{}, unless stated otherwise.
+\chapter{Application}\label{Ch.5}
+In this chapter we will use the theory from the former chapters to derive the risk neutral density function for a call option on an underlying stock. To do so a neural network will be constructed to estimate a function for the implied volatility, which derivatives are then estimated using finite difference.
+
+All the data and code used for the project's application can be found on GitHub; \url{https://github.com/loprtq/P8}.
+
+
+\subsection*{Data}
+We have chosen to work with the stock GOOG and want to derive the risk-neutral density function for call options on this underlying stock. First we retrieved data for these options the 16th of February 2023 including, among other things, option prices, stock prices, strike prices, and time to maturity for options with maturity time in the period from 17-02-2023 to 20-06-2025. Additionally, we calculated the implied volatility for all of these option prices using the function "\lstinline{EuropeanOptionImpliedVolatility}" which utilises the method seen in \eqref{Eq:IV_formula}. The calculated implied volatility will be used to train and test the neural network.
+
+As expected, when plotting the implied volatility from the data with respect to strike prices and time to maturity the mentioned implied volatility smile (see \autoref{Sec.Implied_Volatility}) is only seen when close to maturity. Hence, we exclude all options with time to maturity larger than 0.1 - approximately 36 days. \autoref{Figures:Figures/Pictures/Application/scatter.png} illustrates the implied volatility smile constructed from our data, where it is clear that the volatility smile is more distinct closer to maturity. 
+\imgfig[1]{Figures/Pictures/Application/scatter.png}{Real implied volatility.}
+
+The goal thus becomes constructing a neural network which determines the implied volatility given the strike price and time to maturity as input variables. This neural network would thus be capable of describing the entire volatility surface, hopefully closely resembling the one seen in \autoref{Figures:Figures/Pictures/Application/scatter.png}.
+
+
+\section{A Neural Network for Implied Volatility}
+For the construction of the neural network the package "\lstinline{tensorflow}" is used along with the "\lstinline{keras}" package. After sorting the data there are approximately 11.000 input-output pairs left which should be split in three batches, training, validation and test data sets. We have opted to divide the data into three sets, allocating 50\% for training and 25\% each for validation and testing. This method of splitting the data is widely used and hence adopted. The validation set is utilised to identify overfitting by contrasting the model's error on the training set with that of the validation set. If the training set's error is below that of the validation set, it may suggest the presence of overfitting. An example of such behavior can be seen in \autoref{Figures:Figures/Pictures/Application/Overfitting_loss_mae.pdf}.
+\imgfig[1]{Figures/Pictures/Application/Overfitting_loss_mae.pdf}{MSE and MAE on training and validation set.}
+
+In \autoref{Figures:Figures/Pictures/Application/Overfitting_loss_mae.pdf} it is evident that throughout all 20 epochs the network performs better on the training set than on the validation set, where the error is measured by MAE and MSE.
+
+Another detail about the MAE on the validation set is that it has big jumps. These jumps are not desirable as it indicates that the neural network is not learning in a stable and consistent manner. A validation error curve with sudden jumps can further indicate that the neural network is overfitting to the training set. This can for example be adjusted by changing the learning rate. 
+
+When constructing the neural network there is not one correct network, but choosing one with the smallest MSE, MAE and MAPE as well as with no overfitting is advisable. Though, one should also take in to the consideration the reduction in error compared to the increase in parameters. This is because, as the number of parameters increase so does the number of computations and the computational time.
+
+We have started the construction of the neural network by choosing the number of layers followed by the number of nodes in each layer. We have chosen the loss function as the MSE since this is widely used for function approximations. Furthermore, the identity function is chosen as the activation function in the output layer and a fixed activation function for the hidden layers will be used. In order to ensure a fair comparison of network performance, we tested networks with different numbers of layers and nodes, all trained for a fixed number of $50$ epochs, a minibatch size of $128$ per gradient update and Relu as the activation function. Specifically, we evaluated networks with one, two, three, and four layers, each with a wide range of node counts. To minimise variability in the experimental setup, we kept the optimiser fixed as the Adam optimiser with a learning rate of $0.001$ and decay rates $0.999$ and $0.9$. Additionally, we used fixed training, validation, and test sets, as well as a set seed for each network to ensure reproducibility. Finally, we did not apply any dropout to any of the layers. All of these measures were taken to ensure that any observed differences in performance between the networks were primarily due to their architectural differences, rather than other factors such as differences in training procedures or data set partitioning.
+
+Our comparison revealed that increasing the number of layers led to a significant improvement in both the MSE, MAE and MAPE, with the greatest improvements observed when transitioning from one to two layers and from two to three layers. However, when adding a fourth layer, we did not see a clear improvement in network performance. Moreover, we observed an indication of overfitting as the validation and test errors exceeded that of the training set when adding a fourth layer. A sample of the different networks tested can be seen in \autoref{Table:NN}, where "\# of nodes" describes the number of nodes in each hidden layer. Tests where the nodes in each layer varies have also been done.
+\begin{table}[H]
+    \centering
+    {\renewcommand{\arraystretch}{1.25}\begin{tabular}{c|cccc}
+        \# of nodes &  1 layer & 2 layers & 3 layers & 4 layers\\\hline
+        5   & 7.5432\% & 7.2432\% & 7.1389\% & 7.1069\% \\ \hline
+        20  & 7.1745\% & 5.7547\% & 5.3227\% & 5.3038\% \\ \hline
+        60  & 7.0909\% & 5.2964\% & 5.0457\% & 4.9905\% \\ \hline
+        110 & 6.2565\% & 5.1217\% & 4.8618\% & 4.8618\% \\ \hline
+        210 & 6.1858\% & 5.0628\% & 4.8540\% & 4.8495\%
+    \end{tabular}}
+    \caption{MAPE for different neural networks all run with seed 65.}
+    \label{Table:NN}
+\end{table}
+
+As a result, we concluded that a neural network with three layers provided the optimal balance of performance and generalisation ability, and therefore chose to use this architecture for our subsequent analyses. The preceding analysis was conducted by evaluating up to forty networks for each number of layers, in order to ensure that our conclusions were robust and not based on a limited sample size. 
+
+After choosing the number of layers, we went on to choosing the optimal number of nodes in the network. Here we tried fifty combinations of number of nodes from very small networks with two nodes in each layer up to 250 nodes in each layer. Furthermore, we experimented with the shape of the network. That is, if it was better to start with a wide layer and end with a narrow layer, vise versa, or just have the same width throughout all the layers. We concluded that the network with $110$ nodes in each of the three layers was the neural network that performed best without clear indication of overfitting. This performance can also be seen in the fourth column of \autoref{Table:NN}, where the MAPE decreases approximately $0.2$ going $5$ to $20$, $20$ to $60$, and $60$ to $110$ nodes, but only $0.02$ going from 110 to 210 nodes. That means our network has the same architecture as \autoref{Figures:Figures/Neural_networks/3_layer_NN.pdf} in \autoref{Ch.3}, where $K_0=2$, $K_1 = K_2 = K_3 = 110$ and $K_4 = 1$.
+
+After choosing the architecture we experimented with minibatch sizes, activation functions, and tried other optimisers such as RMSProp. This is concluded by running multiple different networks varying these three things. Here we found that a minibatch size of 32, the Adam optimiser and the Relu activation function performed the best. Lastly, the optimal combination of dropout-, learning-, and decay rates should be found. However, it is too time-consuming to test all possible combinations of dropout-, learning-, and decay rates. Hence, we used the function "\lstinline{tuning_run}" from the package "\lstinline{tfruns}" which runs a hyperparameter tuning experiment based on a given set of parameters to choose among. We chose multiple dropout rates for each hidden layer and multiple learning- and decay rates all seen in \autoref{Table:NN2}. We then chose that the function should test random 30\% of the possible combinations and then we choose the one that perform the best.
+\begin{table}[H]
+    \centering
+    {\renewcommand{\arraystretch}{1.25}\begin{tabular}{c|c}
+        dropout layer 1   & $\left\{0, 0.2, 0.5 \right\}$\\ \hline
+        dropout layer 2  &  $\left\{0, 0.2, 0.5\right\}$\\ \hline
+        dropout layer 3  &  $\left\{0, 0.2, 0.5\right\}$\\ \hline
+        learning rate &  $\left\{0.0001, 0.0005, 0.001\right\}$\\ \hline
+        decay $\alpha$ &  $\left\{0.9, 0.95, 0.99\right\}$\\ \hline
+        decay $\alpha_f$ &  $\left\{0.8, 0.85, 0.9\right\}$\\ 
+    \end{tabular}}
+    \caption{Possible dropout-, learning, and decay rates in "\lstinline{tuning_run}".}
+    \label{Table:NN2}
+\end{table}
+
+Even though it does not seem as many possible choices this already gives us a total of 730 different combinations where the function then chooses 219 random combinations. From this there is a clear indication that the network performs best when $\alpha_f = 0.8$, $\alpha = 0.99$, dropout rate in the last hidden layer is $0$ and the learning rate is $0.0005$. When the other hyperparameters are varied the errors in the validation set is the same. Hence we try running 
+
+
+
+Hence we have chosen to work with the network chosen from the "\lstinline{tuning_run}" function. That is, a neural network with two input nodes, one output node and three hidden layers each with 110 nodes, a dropout rate of 20\% in the last hidden layer and decay rates $\alpha = 0.99$ and $\alpha_f = 0.9$. Furthermore, the network uses the Relu activation function, has a learning rate of $0.00008$ and a minibatch size of $32$. Lastly, this network keeps improving without indication of overfitting up till $1200$ epochs.
+
+
+Even though it does not seem as many possible choices this already gives us a total of 730 different combinations where the function then chooses 219 random combinations. From these combinations the model that performs the best is the one with 10\% dropout in the first and last hidden layer and 0\% in the second layer, has a learning rate of $0.0001$, and decay rates $\alpha = 0.95$ and $\alpha_f = 0.85$. However, a learning rate at $0.0001$ was the smallest possible learning rate we set the function to test. Hence, we ran the function again with the same possible dropout- and decay rates but also smaller learning rate as $0.00008$ and $0.00005$. Here network that performed the best was the one with a 20\% dropout at the last hidden layer and none at the other hidden layers, a learning rate at $0.00008$, and decay rates $\alpha = 0.99$ and $\alpha_f = 0.9$. We also saw that the performance of a network with the same learning rate but a smaller dropout performed just as well but with an indication of overfitting, and networks with larger dropout rates performed worse. In addition to all of this we have also tried to apply an exponentially decay, but we saw no notable improvement of the network. Hence we have chosen to work with the network chosen from the "\lstinline{tuning_run}" function. That is, a neural network with two input nodes, one output node and three hidden layers each with 110 nodes, a dropout rate of 20\% in the last hidden layer and decay rates $\alpha = 0.99$ and $\alpha_f = 0.9$. Furthermore, the network uses the Relu activation function, has a learning rate of $0.00008$ and a minibatch size of $32$. Lastly, this network keeps improving without indication of overfitting up till $1200$ epochs.
+
+Furthermore, the MSE, MAE and MAPE is illustrated in \autoref{Figures:Figures/Pictures/Application/errorplot_final.pdf}.
+\imgfig[1]{Figures/Pictures/Application/errorplot_final.pdf}{MSE, MAE and MAPE on training and validation set.}
+
+Here it is seen that there are no indication of overfitting in either the MAE, MSE or MAPE plot. Furthermore, there are seen some variability in the MAE and MAPE of the validation data set. However these values are so small that they are considered inconsequential. 
+
+After conducting this thorough analysis, we proceed with the data processing using this specific neural network. To further asses the neural network we plot a volatility surface constructed by the chosen neural network together with the test data seen in the figure below, \autoref{Figures:Figures/Pictures/Application/vol_surfaceNN.pdf}. 
+\imgfig[1]{Figures/Pictures/Application/vol_surfaceNN.pdf}{Volatility surface from neural network compared with test data set.}
+
+\autoref{Figures:Figures/Pictures/Application/vol_surfaceNN.pdf} reveals that the volatility surface created by the neural network exhibits a volatility smile, which closely resembles the one observed in the data. This is also evident in the MSE, MAE, and MAPE when evaluating the network on the test data set, seen in \autoref{Table:NN3}. Hence, this reinforces the choice of neural network.
+\begin{table}[H]
+    \centering
+    {\renewcommand{\arraystretch}{1.25}\begin{tabular}{c|c}
+        MSE   &  0.0008\\ \hline
+        MAE  &  0.0168\\ \hline
+        MAPE &  4.1059\%\\ 
+    \end{tabular}}
+    \caption{MSE, MAE and MAPE for the test data set.}
+    \label{Table:NN3}
+\end{table}
+
+Furthermore, to illustrate the error we plot the real values of the implied volatility against the prediction of the neural network which is seen in \autoref{Figures:Figures/Pictures/Application/lineplot.pdf}. For the neural network to perform perfectly, its predictions must follow a diagonal line, illustrated as the black line in \autoref{Figures:Figures/Pictures/Application/lineplot.pdf}. In \autoref{Figures:Figures/Pictures/Application/lineplot.pdf} we see that even though the predictions do not follow the black line exactly it is close.
+\imgfig[1]{Figures/Pictures/Application/lineplot.pdf}{Real implied volatility plotted against the predictions of the neural network. The black line is the theoretical best regression whereas the blue line is the achieved regression.}
+
+Furthermore, we have fitted a linear regression to the predictions as a function of the real values, which is illustrated by the blue line in \autoref{Figures:Figures/Pictures/Application/lineplot.pdf}. The linear regression is constructed using the "\lstinline{lm}" function which has an associated "\lstinline{summary}" seen in \autoref{tab:summary_af_lm}.
+\begin{table}[H]
+    \centering
+    \begin{tabular}{ccccc}
+    \hline\addlinespace[1ex]
+        \multicolumn{5}{c}{Coefficients}\\
+         & Estimate & Std. Error & t-value & Pr($>|t|$)\\
+         Intercept & 0.068 & 0.001 & 59.59 & $<2\cdot 10^{-16}$\\
+         Real Value & $0.836$ & $0.003$ & $316.73$ & $<2\cdot 10^{-16}$\\
+    \addlinespace[1ex]\hline\addlinespace[1ex]
+        \multicolumn{5}{c}{Residual standard error: 0.025 on 13750 degrees of freedom}\\
+        \multicolumn{5}{c}{$R^2$: 0.8795, $R^2$ Adjusted: 0.8794}\\
+    \addlinespace[1ex]\hline
+    \end{tabular}
+    \caption{Summary of the model "\lstinline{lm(Predictions ~ Real Value)}".}
+    \label{tab:summary_af_lm}
+\end{table}
+
+As described before, the neural network would perform perfectly if the "Estimate" in had the value $1$ for "Real value" and $0$ for "Intercept" implying that $R^2=1$. However, it is seen that both the "Estimate" and the $R^2$ are below one, more precisely $0.836$ and $0.8795$, respectively. Removing four outlier improves the $R^2$ a little bit to a value of $0.889$. This indicates that the neural network performs fairly well, but there are room for improvement. Further improvements can possibly be found, by again, using "\lstinline{tuning_run}" for an extended set of possible parameters.
+
+Note that as mentioned the neural network we have selected may not necessarily be the optimal one, as the process of choosing a suitable architecture is complex and subjective. Additionally, due to time constraints, we were unable to experiment with an extensive amount of networks and approaches. Hence, we acknowledge that our chosen network may have limitations and may not be the best possible option.
+
+\newpage 
+%\section{Derivative of the implied volatility}
+%Using the neural network presented in the former section we will now construct the derivatives of the implied volatility with respect to the strike price once and twice. This is done as described in \autoref{Ch.4} by numerically differentiating the implied volatility using finite difference. 
+
+ 
+
+
+
+
+

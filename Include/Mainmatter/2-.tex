@@ -1,69 +1,48 @@
 \chapter{Theory}\label{Ch.2}
 This chapter is based upon \citep{Hull} and \citep{Cal}, unless stated otherwise.
 
-Given a financial market in which many derivatives are traded a common financial problem is pricing these. Of course the price must be $\exp\left(-rT\right)\E[\Q]{\Phi(s)}$, given that $\Q$ is a \emph{risk neutral measure}, $r>0$ is the risk-free rate and $\Phi(s)$ is the pay-off function given that the price is $s$. For markets such as the Black-Scholes market where the volatility is constant, the price is risk-neutral etc. \citep{BS}. This problem is not as difficult as in the markets where these assumptions do not hold. Specifically most financial markets tend to be incomplete \textbf{(Kilde)} hence multiple prices exist. Before addressing this drawback further the project focuses on using options to determine the \emph{implied volatility}.
+Given a financial market in which many derivatives are traded, a common financial problem is pricing these. A general formula for a risk neutral price of a simple European derivative is $\exp\left(-r\tau\right)\E[\Q]{\Phi(S_T)\mid \mathcal{F}_t}$ where $\Q$ is a \emph{risk neutral measure}, $r\in\R$ is the risk-free rate, $\Phi(S_T)$ is the pay-off function, $\tau=T-t$ is time to maturity and $\mathcal{F}_t$ is the information on the market at time $t$. Here $S_T$ is the price of the underlying stock at maturity time, $T$.  However, the problem of pricing derivatives is not necessarily trivial as it often requires the investor to know many things about the market. Hence, other methods of determining the price can be used, either based on a model or historical data in which calibration can be used. Within the calibration problem other factors, than the price, sometimes needs to be generated, such as \emph{implied volatility}. Therefore, before moving on to calibration the subject of implied volatility is introduced as it will play an important role later on. Note that for the remainder of this project the options which will be considered are simple European call options, with pay-off $\Phi(S_T) = (S_T - K)^+$.
 
 
 \section{Implied Volatility}\label{Sec.Implied_Volatility}
-Implied volatility is often interpreted as the market's prediction of future volatility and similarly the evolution of the implied volatility reflects how the market responds to new information. This does not mean that implied volatility can be used to predict whether or not the price will increase or decrease in the future. Furthermore, remember that implied- and historical volatility are not identical; historical- describes the past, whilst implied volatility is interpreted as the future.
+Implied volatility is often interpreted as the market's prediction of future volatility and similarly the evolution of the implied volatility reflects how the market responds to new information. However, this does not mean that implied volatility can be used to predict whether or not the price will increase or decrease in the future.
 
 Even though determining implied volatility is a central problem in finance, there is not a universally accepted method of determining it. A rather used method is, however, to solve
 \begin{align}\label{Eq:IV_formula}
-    C^{M}(T,K) &= C^{BS}\left(T,K,\IV{T,K}\right),\quad T,K>0,
+    C^{M}(t,K) &= C^{BS}\left(t,K,\IV{t,K}\right),\quad t,K>0,
 \end{align}
-where $C^{M}$ is the market's call option price, $C^{BS}$ is the Black-Scholes call option price on the same underlying asset and $\IV{T,K}>0$ is the implied volatility. In practice, numerical methods such as the Newton Raphson or a similar decent method is used to determine the implied volatility such that it satisfies \eqref{Eq:IV_formula}.
+where $C^{M}\geq0$ is the market's call option price, $C^{BS}\geq0$ is the Black-Scholes call option price on the same underlying stock and $\IV{t,K}>0$ is the implied volatility. In practice, numerical methods such as the Newton Raphson or a similar decent method is used to determine the implied volatility such that it satisfies \eqref{Eq:IV_formula}. 
 
+As an investor you might feel indifferent about knowing the implied volatility of a single option as it tells not much, if anything, about the underlying stock. Thus, to give a better understanding of the volatility of the options on an underlying stock investors look at its \emph{implied volatility surface}. If an investor is able to determine the implied volatility surface, then the investor is able to determine all prices quoted using the Black-Scholes formula as well as the Greeks. However, for the prices determined from the implied volatility surface to be arbitrage-free, the surface has to be determined from arbitrage-free prices. If this is not the case, these prices might not be arbitrage-free.
+\dimgfig{Figures/Pictures/Volatility Surface Smile.png}{Volatility surface for stock price $S_t=100$, strike price, $K$, and time to maturity, $\tau=T-t$.}{Figures/Pictures/Volatility Surface Skew.png}{Volatility surface for stock price $S_t=100$, strike price, $K$, and time to maturity, $\tau=T-t$.}
 
-\subsection{Volatility Surface}\label{SSec.Volatility_Surface}
-As an investor you might feel indifferent about knowing the implied volatility of a single option as it tells not much, if anything, about the underlying stock. So, to give a better understanding of the volatility of the options on an underlying stock investors look at its \emph{implied volatility surface}. 
-\imgfig[0.25]{Figures/Pictures/Volatility Surface.pdf}{Volatility surface for Moneyness: $K/S$ and time to maturity: $T-t$.}
-As seen in \autoref{Figures:Figures/Pictures/Volatility Surface.pdf} the closer the options get to maturity, the closer it resembles the \emph{volatility smile}. Similarly, the further the option is to maturity, the more likely it is to be close to 0. 
+As is evident in \autoref{Figures:Figures/Pictures/Volatility Surface Smile.png}, the closer the options get to maturity, the more symmetric around at the money (ATM) it becomes, closely resembling what is known as the \emph{volatility smile}. What this means heuristically is that the options ATM have lower implied volatility than out the money (OTM) and in the money (ITM). In \autoref{Figures:Figures/Pictures/Volatility Surface Skew.png} something different occurs, namely that close to maturity it does not resemble the volatility smile. This \emph{volatility skew}, as it is called, can be caused by numerous factors such as the supply and demand, price sensitivities to changes in the underlying asset's price etc. Focusing on the supply and demand factor, it would in \autoref{Figures:Figures/Pictures/Volatility Surface Skew.png} mean that the demand for options ITM is larger than the demand for options OTM.
+
+As seen in \autoref{Figures:Figures/Pictures/Volatility Surface Smile.png} the closer the options get to maturity, the closer it resembles either the \emph{volatility smile} or \emph{volatility skew}. If it is a volatility smile the bottom of it is at the money (ATM), whereas if it is a volatility skew the the bottom of the implied volatility is not ATM. This skewness can be a result a supply and demand, price sensitivities to changes in the underlying asset's price.
+
+Again, given that an investor is able to determine the markets implied volatility surface this can be used to determine prices, which can be achieved either by using a model or historical data. For both determining the function for the implied volatility surface and the option price, calibration can, as previously mentioned, be used.
 
 
 \section{Calibration}\label{Sec.Calibration}
-As mentioned in the beginning of the chapter it is a drawback that financial markets tend to be incomplete. This has the implication, that given a derivative's market price can be described by $\pazocal{P}\left(\theta,\alpha\right)$ where $\alpha$ is the derivatives fixed parameters (e.g. maturity time $T$ and interest rate $r$) and $\theta$ is the model parameters, then infinitely many prices exist. Given that the model is accurate, then there exists a $\theta^m$ such that $\pazocal{P}\left(\theta^m,\alpha\right)$ is the market's price for a given $\alpha$. Thus an agent would like to estimate $\theta^m$ to determine the market's price. This approach is what is known as \emph{model calibration} as it utilises the pricing model. Once more, given a closed form model such as the one in the Black-Scholes market, this task is trivially solved, whereas for other, non-closed form, models $\theta^m$ has to solved numerically. 
+Calibration, in finance, is the process of estimating the dynamics of the risk-neutral measure. To clarify what is meant by the above, consider a financial market in which prices can be described by a model $\pazocal{P}\left(\theta,\alpha\right)$. In this model, $\theta$ represents the model's $n$ parameters and $\alpha$ represents the derivatives fixed parameters such as maturity time and risk-free interest rate. Thus, given $\alpha$, there must exist a associated $\widehat{\theta}$ such that $\pazocal{P}\left(\widehat{\theta},\alpha\right)$ is exactly the market price. This also implies that given a market price and $\alpha$ then one should be possible to determine $\widehat{\theta}$. This is what is known as \emph{model calibration} as it requires a model. Formally, this can be described as
+\begin{align*}
+    \widehat{\theta} &= \arg\min_{\theta\in\Theta}\pazocal{C}\left(\pazocal{P}\left(\theta,\alpha\right),\pazocal{P}\left(\widehat{\theta},\alpha\right)\right),
+\end{align*}
+where $\pazocal{C}$ is a suitable metric and $\Theta\subseteq\R^n$ represents the set for which the model's constraints are fulfilled. Naturally, this methodology is easier given a model which has a closed-form solution, such as the Black-Scholes model, whereas for other models, with no closed-form solutions, $\widehat{\theta}$ has to solved numerically. This also has the implication that as data sets get larger, the slower the numerical approach becomes \citep{Art}.
 
-Another approach, which does not depend on a model, is \emph{risk-neutral calibration}, which attains its name from utilising the \emph{risk neutral density function}, $f_T^\Q$. Thus, given that one is working with \emph{European options} the general pricing formula, presented in the beginning is equal to
+Another calibration method, which does not require a model, but only market prices is the \emph{risk-neutral calibration}, which has its foundation in the general pricing formula, presented in the beginning. Thus, given that one is working with simple \emph{European options}, and the existence of the risk-neutral density, then the pricing formula is equal to
 \begin{align}\label{Eq:RND_Pricing}
-    \exp\left(-rT\right)\E[\Q]{\Phi(S_T)} &= \exp\left(-rT\right)\int_\R\Phi(s)f_T^\Q(s)\,\mathrm{d}s.
+    C(t,K) &= \exp\left(-r\tau\right)\E[\Q]{\Phi(S_T)\mid S_t} = \exp\left(-r\tau\right)\int_\R(S_T-K)^+f^\Q(S_T\mid S_t)\,\mathrm{d}S_T,
 \end{align}
-
-For a European call option with price $C$ and pay-off function $\Phi(S_T)=\max(0, S_T-K)$ for $S_T, K>0$, then \eqref{Eq:RND_Pricing} is equivalent to
-\begin{align}\label{Eq:RND_Calibration}
-    C(T,K) &= \exp\left(-rT\right)\int_K^\infty (s-K)f_T^\Q(s)\,\mathrm{d}s.
-\end{align}
-It should be intuitively clear that if $C$ depends on a given set of parameters $\theta$ then $C(T,K)$ could differ, depending on $\theta$. As mentioned previously, the goal of calibration thus becomes determining $f_T^{\Q}$ as it is the only unknown in \eqref{Eq:RND_Calibration}. Remark that calibration and estimation is not the same
-
-Using \eqref{Eq:RND_Calibration} one obtains that conditioned on $K=s$, then
-\begin{align}\label{Eq:PartialC}
-    \frac{\partial^2}{\partial K^2}C(T,K) &= \exp\left(-rT\right)f_T^\Q(s),
-\end{align}
-where $\exp\left(-rT\right)$ is deterministic hence $\frac{\partial^2}{\partial K^2}C(T,K)$ describes $f_T^\Q(s)$. Thus, to determine $f_T^\Q(s)$ one just has to determine $\frac{\partial^2}{\partial K^2}C(T,K)$.
-
-Using \citep{1458}, \eqref{Eq:PartialC} can be written as
-\begin{align}\begin{aligned}\label{Eq:RND_Derivatives}
-    \frac{\partial^2}{\partial K^2}C(T,K) &= \frac{\partial^2}{\partial K^2}C^{BS}\left(T,K,\IV{T,K}\right)+2\frac{\partial^2}{\partial K\partial\sigma}C^{BS}\left(T,K,\IV{T,K}\right)\frac{\partial}{\partial K}\IV{T,K}\\
-    &+\frac{\partial^2}{\partial\sigma^2}C^{BS}\left(T,K,\IV{T,K}\right)\left(\frac{\partial}{\partial K}\IV{T,K}\right)^2+\frac{\partial}{\partial\sigma}C^{BS}\left(T,K,\IV{T,K}\right)\frac{\partial^2}{\partial K^2}\IV{T,K},
+given $K,T>0$ and $\tau=T-t\geq0$. On the right hand side of \eqref{Eq:RND_Pricing}, the only unknown is the risk-neutral density function $f^\Q$, which represents the conditional distribution of $S_T$ given the price $S_t$ for $t<T$. Hence, if one can determine this function one is able to describe how option prices behave under the risk-neutral measure $\Q$. One notices that differentiating the right hand side of \eqref{Eq:RND_Pricing} with respect the strike price twice for $K=S_T$ yields
+\begin{align}\begin{aligned}\label{Eq:PartialC}
+    \frac{\partial^2}{\partial K^2}C(t,K) &= \exp\left(-r\tau\right)\frac{\partial}{\partial K}\int_K^\infty -f(S_T)\,\mathrm{d}S_T\\
+    &=\exp\left(-r\tau\right)f^\Q(S_T).
 \end{aligned}\end{align}
-which in part tells that one only has to determine $\IV{T,K}$ as well as its derivatives to determine $f_T^\Q(s)$. Given that implied volatility, $\IV{T,K}$, does not have a closed form solution it has to be approximated numerically. A fairly well-known method of estimating derivatives is the finite difference method presented in the following section. Moreover, the project will later on focus on how neural networks are constructed and how they can be used to estimate the implied volatility function, $\mathrm{IV}$ (See \autoref{Ch.3}).
-
-
-\section{Finite Difference}\label{Sec.Finite_Difference}
-The principal of the \emph{finite difference} method is to numerically solve ordinary differential equations using difference quotients \citep{Hull}. The finite difference method has multiple submethods, such as \emph{forward difference} and \emph{backward difference} which for a function $f$ are given by
-\begin{align*}
-    \frac{\partial f}{\partial t}=\frac{f(t+\Delta)-f(t)}{\Delta}+\pazocal{O}(\Delta)\quad\textrm{and}\quad\frac{\partial f}{\partial t}=\frac{f(t)-f(t-\Delta)}{\Delta}+\pazocal{O}(\Delta),
-\end{align*}
-respectively. It should be trivial to see that $\pazocal{O}(\Delta)$ decreases as $\Delta$ decreases, minimising the error of the derivative. The finite difference method also has a submethod called the \emph{central difference} which for a function $f$ is given by
-\begin{align*}
-    \frac{\partial f}{\partial t} &= \frac{f(t+\Delta)-f(t-\Delta)}{2\Delta}+\pazocal{O}(\Delta^2),
-\end{align*}
-where the error $\pazocal{O}(\Delta^2)$ is smaller than that of the forward- and backward difference. All of these methods can be repeated $k$ times if one has to determine the $k$'th derivative of a function $f$.
-
-Given $\Delta$ is small and $\partial f/\partial t$ is continuous, then it should be a good approximation. Thus given the a neural network or another function estimating method produces a smooth enough function, finite difference can be easily implemented, especially for lower order derivatives, meaning the derivatives of $\mathrm{IV}$ in \eqref{Eq:RND_Derivatives} can be determined numerically. All this talk about neural networks leads one to look closer at the subject in \autoref{Ch.3}.
-
-
-
-
-\nomenclature[]{$C^M$}{Market's call option price}
-\nomenclature[]{$C^{BS}$}{Black Scholes call option price}
-\nomenclature[]{$\IV{\cdot}$}{Implied Volatility}
+Hence, if one is able to determine $\partial^2C(t,K)/\partial K^2$, then one can also determine $f^\Q$. Another way of writing $\partial^2C(t,K)/\partial K^2$ can be derived using the multivariate chain rule and \eqref{Eq:IV_formula}. Thus,
+\begin{align}\begin{split}\label{Eq:RND_Derivatives}
+    \frac{\partial^2}{\partial K^2} C(t,K) &= \frac{\partial}{\partial K}\left(\frac{\partial}{\partial K} C^{BS}\left(t,K,\IV{t,K}\right) + \frac{\partial}{\partial\IV{t,K}} C^{BS}\left(t,K,\IV{t,K}\right)\frac{\partial}{\partial K}\IV{t,K}\right)\\
+    &= \frac{\partial^2}{\partial K^2}C^{BS}\left(t,K,\IV{t,K}\right)+2\frac{\partial^2}{\partial K\partial\IV{t,K}}C^{BS}\left(t,K,\IV{t,K}\right)\frac{\partial}{\partial K}\IV{t,K}\\
+    &\phantom{=} +\frac{\partial^2}{\partial\left(\IV{t,K}\right)^2}C^{BS}\left(t,K,\IV{t,K}\right)\left(\frac{\partial}{\partial K}\IV{t,K}\right)^2\\&\phantom{=} +\frac{\partial}{\partial\IV{t,K}}C^{BS}\left(t,K,\IV{t,K}\right)\frac{\partial^2}{\partial K^2}\IV{t,K}.
+\end{split}\end{align}
+Hence, one only has to determine $\IV{t,K}$ as well as its derivatives to determine $f^\Q$, since the Black-Scholes formula has a closed-form solution and its derivatives can thus be derived. On the contrary, the implied volatility, $\IV{t,K}$, does not have a closed form solution as it has to be approximated numerically. In the project's application this will be done using \emph{neural networks}, whilst its derivatives will be determined using the \emph{finite difference} method, both elaborated further upon in \autoref{Ch.3} and \autoref{Ch.4}, respectively.

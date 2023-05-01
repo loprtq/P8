@@ -1,2 +1,17 @@
-\chapter{}\label{Ch.6}
-This chapter is based upon \citep{}, unless stated otherwise.
+\chapter{Application 2}\label{Ch.6}
+This chapter will utilise methods described in the previous chapters to derive the risk-neutral density function for call options on numerous underlying stocks. The risk-neutral function will be estimated by constructing a neural network which estimates the implied volatility. The derivatives of the implied volatility, required in \eqref{Eq:PartialC}, will be estimated using finite difference.
+
+The project's code and data is available on GitHub:  \url{https://github.com/loprtq/P8}.
+
+
+\subsection*{Data}
+As mentioned, we will be working with numerous underlying stocks, specifically: Tesla Inc. (TSLA), Amazon Inc. (AMZN) and Alphabet Inc. Class C (GOOG). These stocks have been chosen because of their varying liquidity and vast option data. As we wish to derive the 
+
+
+For these stocks we retrieve information about the stock price, strike price and time to maturity. Additionally, we set the risk-free rate to $r=0.0368$ and calculate the implied volatility according to the method seen in \eqref{Eq:IV_formula} using the function "\lstinline{EuropeanOptionImpliedVolaitlity}". 
+
+% Filtrering
+
+% Implied volatility plot
+As seen in \autoref{Sec.Implied_Volatility}, the implied volatility surface only depends on the strike price $K$ and time to maturity $\tau=T-t$ given a price $S_t$. If we restrict our focus to GOOG and plot its implied volatility in \autoref{Figures:Figures/Pictures/Application/scatter.png} we see that it has the previously mentioned volatility smile (see \autoref{Sec.Implied_Volatility}).
+\imgfig[1]{Figures/Pictures/Application/scatter.png}{Implied volatility of GOOG for $S_t=100$. For a 3D render, see }

@@ -1,7 +1,9 @@
 % Preamble/Configurations.tex
 % -------------------------------------------------------------------------------
 % Configurations for the report
-
+\DeclareRobustCommand\ttfamily
+        {\not@math@alphabet\ttfamily\mathtt
+         \fontfamily\ttdefault\normalfont\normalsize}
 
 % Basic configurations ----------------------------------------------------------
 \raggedbottom
@@ -103,7 +105,7 @@
 
 % https://tex.stackexchange.com/q/42611
 \usetikzlibrary{arrows.meta}                        % Different arrowheads
-\usetikzlibrary{calc}                               % Better calculations
+% \usetikzlibrary{calc}                               % Better calculations
 \usetikzlibrary{positioning}                        % Better positioning
 
 % Predefined styles
@@ -133,7 +135,7 @@
     extendedchars=true,
     language=Python,
     showstringspaces=false,
-    basicstyle=\footnotesize\ttfamily,
+    basicstyle=\ttfamily,
     keywordstyle=\bfseries\color{AAUblue1},
     commentstyle=\itshape\color{AAUgrey3},
     identifierstyle=\color{AAUblue2},
@@ -148,10 +150,10 @@
     extendedchars=true,
     language=R,
     showstringspaces=false,
-    basicstyle=\footnotesize\ttfamily,
-    keywordstyle=\bfseries\color{AAUblue2},
+    basicstyle=\ttfamily,
+    keywordstyle=\bfseries\color{AAUblue1},
     commentstyle=\itshape\color{AAUgrey3},
-    identifierstyle=\color{AAUblue1},
+    identifierstyle=\color{AAUblue2},
     stringstyle=\color{AAUteal},
 }
 \lstdefinestyle{customJ}{
@@ -163,14 +165,14 @@
     extendedchars=true,
     language=Julia,
     showstringspaces=false,
-    basicstyle=\footnotesize\ttfamily,
+    basicstyle=\ttfamily,
     keywordstyle=\bfseries\color{AAUblue2},
     commentstyle=\itshape\color{AAUgrey3},
     identifierstyle=\color{AAUblue1},
     stringstyle=\color{AAUteal},
 }
 
-\lstset{style=custompy, captionpos=b, frame=lines, rulecolor=\color{AAUblue1}}
+\lstset{style=customR, captionpos=b, frame=lines, rulecolor=\color{AAUblue1}}
 \renewcommand{\lstlistingname}{Listing}
 \providecommand*{\listingautorefname}{Listing}
 \renewcommand{\lstlistlistingname}{List of Listings}
