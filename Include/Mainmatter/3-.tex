@@ -11,26 +11,32 @@ This chapter is based upon \citep[Ch. 10]{SL-ISLR}, \citep[Ch. 1]{NN} and \citep
 %    \item Epoch: times iterated through the training data
 %\end{itemize}
 
-There are several different methods of calibrating the implied volatility described in \autoref{Sec.Calibration}. One method that can be used is, as mentioned, \emph{neural networks}. The name "neural network" comes from it being a method of simulating the mechanism of the human nervous system. The primary objective of \textit{feed-forward} neural networks is to approximate an unknown function $f$, estimated through input-output pairs $(x, y = f(x))$ defining a mapping $\hat{y} = \hat{f}(x)$. Here "feed-forward" refer to that the network only feeds information in the direction from the input layer to the output layer. These kind of networks will be the only ones represented in the report. Neural networks can be used for multiple purposes such as identifying handwritten numbers, forecasting time series and, as mentioned, calibrating implied volatility. Depending on the problem neural networks can be constructed in different ways. In the following section, the simplest form of a neural network is presented which is a single layer neural network also called a \emph{perceptron}.
+% As described in \autoref{Sec.Calibration}, numerous methods for calibration the implied volatility function exists, one of these being \emph{neural networks}, which will be the focus in this project. The name "neural network" and its constructiong is inspired by the human brain as it was designed to simulate its neurons and synapses. Due to its structure and flexibility, neural networks can be used for numerous purposes such as identifying handwritten numbers, forecasting time series and, estimating functions. Depending on the problem the neural network can be constructed in different ways. As this project concerns itself with estimating the implied volatility function, it will focus on \emph{feed-forward} neural networks. The primary objective of these types of neural networks are to approximate an unknown function $f$, estimated through \emph{input-output pairs} $(x, y = f(x))$ defining a mapping $\hat{y} = \hat{f}(x)$. The name "feed-forward" refers to the fact that the neural network only feeds information in the direction from the input layer to the output layer. To provide a simple introducting to the construction of neural networks, a single-layer neural network, also called a \emph{perceptron}, is introduced in the following section. 
+
+There are several different methods of calibrating the implied volatility described in \autoref{Sec.Calibration}. One method that can be used is, as mentioned, \emph{neural networks}. The name "neural network" comes from it being a method of simulating the mechanism of the human nervous system. The primary objective of \emph{feed-forward} neural networks is to approximate an unknown function $f$, estimated through input-output pairs $(x, y = f(x))$ defining a mapping $\hat{y} = \hat{f}(x)$. Here "feed-forward" refer to that the network only feeds information in the direction from the input layer to the output layer. These kind of networks will be the only ones represented in the report. Neural networks can be used for multiple purposes such as identifying handwritten numbers, forecasting time series and, as mentioned, calibrating implied volatility. Depending on the problem neural networks can be constructed in different ways. In the following section, the simplest form of a neural network is presented which is a single-layer neural network also called a \emph{perceptron}.
 
 
-\section{Single Layer Neural Network - the perceptron} 
-The perceptron is consists of an \emph{input layer} and an \emph{output layer}, where the input layer contains a number of \emph{nodes} which each represent an input variable, $x_1, \ldots, x_{K_0}, 0 < K_0 \in \N$. From each node in the input layer there is an edge with an associated \emph{weight}, $w_1, \ldots, w_{K_0}$, to the output nodes in the output layer. The output nodes take the value of the linear combination $\sum_{i = 1}^{K_0} w_ix_i$ followed by applying an \emph{activation function} to predict the dependent variable also called the output variable. This activation function can, for example, be the sign function or the identity function. Besides the input nodes and weights, a \emph{bias} term, $b$, is sometimes needed to correct the linear combination for some invariant part of a model. In the computation of the prediction of the output variable this bias term is added to the linear combination before applying the activation function. For example, if the input variables, bias term and weights are given as above, $\hat{y}$ is the prediction of the output variable and the activation function is the sign function, then
+\section{Single-Layer Neural Network - Perceptron}
+% Alt efter || er dit
+% As mentioned, the perceptron is the simplest form of a neural network only consisting of an \emph{input}- and \emph{output layer}. The input layer consists of $K_0$ \emph{nodes} each representing an input variable, $x_1, \ldots, x_{K_0}$, $0 < K_0 \in \N$, and the output layer consists of one node representing an output variable, $\hat{y}$. Each node in the input layer has an edge with an \emph{edge} with an associated \emph{weight}, $w_1, \ldots, w_{K_0}$, to the node in the output layer. The output node takes the value of the linear combination $\sum_{i = 1}^{K_0} w_ix_i$ followed by applying an \emph{activation function} to predict the output variable. Two examples of activation functions are the sign function and the identity function. || Beside the input nodes and weights, a \emph{bias} term, $b$, is sometimes needed to correct the linear combination for some invariant part of a model. In the computation of the prediction of the output variable this bias term is added to the linear combination before applying the activation function. For example, if the input variables, bias term and weights are given as above, $\hat{y}$ is the prediction of the output variable and the activation function is the sign function, then
+% \begin{align}\label{eq:sign_perceptron_output}
+%     \hat{y} &=  \operatorname{sign}\left(\sum_{i=1}^{K_0} w_ix_i + b\right).
+% \end{align}
+
+The perceptron consists of an \emph{input layer}, and an \emph{output layer}, where the input layer consists of $K_0$ \emph{nodes} which each represent an input variable, $x_1, \ldots, x_{K_0}$, $0 < K_0 \in \N$. From each node in the input layer there is an \emph{edge} with an associated \emph{weight}, $w_1, \ldots, w_{K_0}$, to the node in the output layer. The output node takes the value of the linear combination $\sum_{i = 1}^{K_0} w_ix_i$ followed by applying an \emph{activation function} to predict the dependent variable also called the output variable. This activation function can, for example, be the sign function or the identity function. Besides the input nodes and weights, a \emph{bias} term, $b$, is sometimes needed to correct the linear combination for some invariant part of a model. In the computation of the prediction of the output variable this bias term is added to the linear combination before applying the activation function. For example, if the input variables, bias term and weights are given as above, $\hat{y}$ is the prediction of the output variable and the activation function is the sign function, then
 \begin{align}\label{eq:sign_perceptron_output}
-    \hat{y} =  \operatorname{sign}\left(\sum_{i=1}^{K_0} w_ix_i + b\right).
+    \hat{y} &=  \operatorname{sign}\left(\sum_{i=1}^{K_0} w_ix_i + b\right).
 \end{align}
  
-A neural network can also be presented as a diagram where \autoref{Figures:Figures/Neural_networks/Preceptron-diag.pdf} is a example of a perceptron, where all the aforementioned terms are illustrated. This is the perceptron with $K_0$ nodes in the input layer and one node in the output layer. In \autoref{Figures:Figures/Neural_networks/Preceptron-diag.pdf} it is also seen that the bias term is incorporated in the diagram as a node with the value one and a weight, $b$.
+A neural network can also be presented as a diagram where \autoref{Figures:Figures/Neural_networks/Preceptron-diag.pdf} is a example of a perceptron, with all of the aforementioned terms illustrated. This is the perceptron with $K_0$ nodes in the input layer and one node in the output layer. In \autoref{Figures:Figures/Neural_networks/Preceptron-diag.pdf} it is also seen that the bias term is incorporated in the diagram as a node with the value one and a weight, $b$.
 \imgfig[0.2]{Figures/Neural_networks/Preceptron-diag.pdf}{Visualisation of a perceptron with $K_0$ input nodes and one output node.}
 
-%evt ved brug af https://tikz.net/neural_networks/
-
-Even though, as seen in \autoref{Figures:Figures/Neural_networks/Preceptron-diag.pdf} and described above, the perceptron contains two layers (input and output), it is called a single layer neural network. The reason for this is that all computations are performed in the output layer, meaning there is only one \emph{computational layer}. If there are more computational layers it is called a \emph{multilayer neural network}, which will now be described. The theory presented in the following section is a generalisation of that of the perceptron, and can therefore also be used for the perceptron. 
+Even though, as seen in \autoref{Figures:Figures/Neural_networks/Preceptron-diag.pdf} and described above, the perceptron contains two layers (input and output), it is called a single-layer neural network. The reason for this is that all computations are performed in the output layer, meaning there is only one \emph{computational layer}. If there are more computational layers it is called a \emph{multi-layer neural network}, which will now be described. The theory presented in the following section is a generalisation of that of the perceptron, and can therefore also be used for the perceptron. 
 
 
-\section{The Multilayer Neural Network}
-As just mentioned multilayer neural networks contains in addition to the input- and output layer further computational layers called \emph{hidden layers}. These additional computational layers are in between the input- and output layer and each layer contains a number of nodes. Furthermore, it is assumed that all nodes in one layer is connected to all nodes in the next layer with associated weights. A diagram of a multilayered neural network with $K_0$ input nodes, three hidden layers with respectively $K_1$, $K_2$ and $K_3$ nodes in, and a output layer with $K_4$ output nodes is presented in \autoref{Figures:Figures/Neural_networks/3_layer_NN.pdf}, where $0<K_j \in \N, j = 0,\ldots, 4$.
-\imgfig[0.6]{Figures/Neural_networks/3_layer_NN.pdf}{Visualisation a multilayered neural network.}
+\section{The Multi-Layer Neural Network}
+As mentioned, multi-layer neural networks contain multiple computational layers, with the layers between the input- and output layer being called \emph{hidden layers}. These hidden layers, consists of nodes each with an edge from the previous layer, and an edge to the preceding layer, where each of edges have an associated weight. To visually aid this description, a diagram of a multi-layered neural network with $K_0$ input nodes, three hidden layers with respectively $K_1$, $K_2$ and $K_3$ nodes, and a output layer with $K_4$ output nodes is presented in \autoref{Figures:Figures/Neural_networks/3_layer_NN.pdf}, where $0<K_j \in \N$, $j = 0,\ldots, 4$.
+\imgfig[0.6]{Figures/Neural_networks/3_layer_NN.pdf}{Visualisation a multi-layered neural network.}
 
 In \autoref{Figures:Figures/Neural_networks/3_layer_NN.pdf} it is seen that for each computational layer there is an additional node representing a bias term, with connecting edges to each node in the computational layer.
 
@@ -50,7 +56,7 @@ All the notation of these calculation, except the activation functions, is prese
 
 Formally a neural network are defined as follows.
 \begin{defn}[Neural Networks]\label{def:NN}
-    Let $T \in \N$ and the $(K_0, K_1, K_2, \ldots, K_T) \in\N^{T+1}$ be the number of computational layers and nodes in each layer, respectively. Then a neural network is a function from $\R^{K_0}$ to $\R^{K_T}$ defined as the composition
+    Let $T \in \N$, and $(K_0, K_1, K_2, \ldots, K_T) \in\N^{T+1}$ be the number of computational layers and nodes in each layer, respectively. Then a neural network is a function from $\R^{K_0}$ to $\R^{K_T}$ defined as the composition
     \begin{align}\label{eq:NN}
         x \in \R^{K_0} \mapsto g_T \circ A^{(T)} \circ g_{T-1} \circ A^{(T-1)} \circ \cdots \circ g_1 \circ A^{(1)}(x).
     \end{align}
@@ -63,7 +69,7 @@ Formally a neural network are defined as follows.
 
 The weights and bias terms are the parameters of the neural network and will be denoted $\bm{\theta} \in \R^{N}$ where $N = \sum_{l = 0}^{T-1} K_j(1+K_j)$ and the set of all possible parameters will be denoted $\Theta$. Furthermore, the function presented in \eqref{eq:NN} will be denoted $\hat{f}_{\bm{\theta}}(\cdot)$ and the set of all such networks for $\bm{\theta} \in \Theta$ is denoted $\mathcal{NN}_{K_0, K_T, T}(\Theta)$ or just $\mathcal{NN}_{K_0, K_T, T}$.
 
-In any neural network, independent of the number of computational layers, the choice of activation function is important. Depended on what type of value the output should be there are different types of activation functions that can be used. For example the identity function can be used if the predicted value of the dependent variable should be real. Furthermore, if one wants to get a probability of a class, functions such as the sigmoid can be used. Although the Rectified Linear Unit (ReLU) function is often used instead of the sigmoid to ease some computations. Moreover, the activation function in the hidden layers and the output layer does not have to be the same. The ReLU function can be used in the hidden layers of a multilayered neural network, while the identity function can be used in the output layer. For more information about the choice of activation functions, see \citep[p. 2-6]{NNDesign} and \citep[p. 11-13]{NNDL}.
+In any neural network, independent of the number of computational layers, the choice of activation function is important. Depended on what type of value the output should be there are different types of activation functions that can be used. For example the identity function can be used if the predicted value of the dependent variable should be real. Furthermore, if one wants to get a probability of a class, functions such as the sigmoid can be used. Although the Rectified Linear Unit (ReLU) function is often used instead of the sigmoid to ease some computations. Moreover, the activation function in the hidden layers and the output layer does not have to be the same. The ReLU function can be used in the hidden layers of a multi-layered neural network, while the identity function can be used in the output layer. For more information about the choice of activation functions, see \citep[p. 2-6]{NNDesign} and \citep[p. 11-13]{NNDL}.
 
 
 \section{Backpropagation}
@@ -177,35 +183,52 @@ Note that the universal approximation theorem can be extended to many different 
         \norm{f - \hat{f}_{\theta}}_2 < \varepsilon, 
     \end{align*}
     where $\norm{\cdot}_2$ is the $L^2$-norm. That is, $\mathcal{NN}^g_{K_0, 1, T}$ is dense in $L^2(\mu)$ for all finite measures $\mu$.
-\end{thm}\nomenclature[]{$\norm{\cdot}_2$}{$L^2$-norm}
-\begin{proof}
-    Omitted.
-\end{proof}
-
-In short, \autoref{Thm:UAT} states that it is possible to approximate any one dimensional function in $L^2$ arbitrarily close using a function in $\mathcal{NN}^g_{K_0, 1, T}$. As mentioned, this theorem can be found in several different versions. An example is one with more specific activation functions or width and depth of the network. Furthermore, another one states that a neural network with a single hidden layer can approximate a function of class $C^n$ and all it derivatives up to order $n$ if the activation function is of class $C^n$. Hence, if one wants to insure the convergence for the $d$'th order derivative of the function one should choose a activation function $g \in C^n$, $n \geq d$. This also implies that even if the ReLu is often chosen instead of the sigmoid as activation function, one should be careful using the ReLu when approximating derivatives since convergence is not ensured. Conversely, the sigmoid can be used as activation function when approximating both a function and its derivatives.
-
-It is possible to specify the difference of the target function, $f$, and a function, $\hat{f}_\theta$, approximated by a neural network further, if $\hat{f}_\theta$ is approximated using least square error. Hence, the function minimises the sum of squared differences between the predicted outputs and real values. That is,
-\begin{align}\label{eq:brugi_estimation_bounds}
-    \hat{f}_{\bm{\theta}}(\bm{x}) &= \hat{f}_{\hat{\bm{\theta}}}(\bm{x}), \\
-    \hat{\theta} &= \arg \min_{\bm{\theta} \in \Theta} \left(\frac{1}{N} \sum_{i = 1}^N \left(y_i - \hat{f}_{\theta}(\bm{x_i})\right)^2 \right)
-\end{align}
-for some finite set $\Theta$ and $N$ input-output pairs $(\bm{x_i}, y_i)$ drawn from the distribution of the data. 
-
-Under these assumptions the following theorem provides an indicating of how the number of nodes and the training data set size affects the approximation error when using the sigmoid function as the activation function. 
-\begin{thm}[Estimation bounds for Neural Networks]\label{Thm:estimation_bounds}
-    Let the set of neural networks $\mathcal{NN}^g_{K_0, 1, 2}$ be given as in \autoref{def:NN} with the restrictions given in the beginning of the section. Let the activation function be given as $g(x) = \frac{\exp{(x)}}{\exp{(x)}+1}$. Furthermore, let estimator $\hat{f}_{\bm{\theta}}$ be given as \eqref{eq:brugi_estimation_bounds}. Then the global accuracy of the estimator, measured by the mean integrated squared error, satisfies
-    \begin{align}\label{Eq:Estimation_bounds}
-        \E{\norm{f-\hat{f}}_2^2} \leq \mathcal{O}\left(\frac{C^2}{n} \right) + \mathcal{O}\left(\frac{nd_0}{N} \log{(N)} \right) 
-    \end{align}
-    where $f: \R^{K_0} \to \R$ is the target function. Furthermore, $n$ denotes the number of nodes, $N$ the size of the training data set, and $C$ a constant.
 \end{thm}
 \begin{proof}
     Omitted.
 \end{proof}
 
-The first term on the right side in \eqref{Eq:Estimation_bounds} decreases as the number of nodes increase. Though, it is also seen in the second term that the size of the training data set should increase as the number of nodes increases to keep the error down. Additionally, this helps prevent the neural network from overfitting. Nevertheless, \autoref{Thm:estimation_bounds} is only stated for the sigmoid function, whilst \citep[s. 117]{Barron} states that similar results can be obtained for multiple other activation functions.
+In short, \autoref{Thm:UAT} states that it is possible to approximate any one dimensional function in $L^2$ arbitrarily close using a function in $\mathcal{NN}^g_{K_0, 1, T}$. As mentioned, multiple different versions of this theorem exist. An example is one with more specific activation functions or width and depth of the network. Furthermore, another one states that a neural network with a single hidden layer can approximate a function of class $C^n$ and all it derivatives up to order $n$ if the activation function is of class $C^n$. Hence, if one wants to insure the convergence for the $d$'th order derivative of the function one should choose a activation function $g \in C^n$, $n \geq d$. This also implies that even if the ReLu is often chosen instead of the sigmoid as activation function, one should be careful using the ReLu when approximating derivatives since convergence is not ensured. Conversely, the sigmoid can be used as activation function when approximating both a function and its derivatives.
 
-Despite the potential effectiveness of the single layer neural networks, mentioned in \eqref{Eq:Estimation_bounds}, with multiple activation functions, their practicality is limited due to their exponential increase in dimension. Moreover, their high susceptibility to overfitting adds to their impracticality. When designing a neural network, a fundamental question arises regarding the optimal trade-off between its width and depth, where width and depth represents number of nodes in the layers and number of layers, respectively. Should one choose a narrow and deep network with multiple layers but fewer nodes per layer, or a shallow and wide network? Both empirical evidence and intuition suggest that depth plays a crucial role in the performance of a neural network. Deep architectures tend to result in complex models that are challenging to achieve with shallow networks, \citep{REOS}. In fact, Theorem 1 in \citep{REOS} states that the approximation of a function in a two layer neural network will require exponentially many nodes compared to a three layered neural network to gain the same accuracy. %Thus, when designing a neural network it is preferable that it is deep instead of wide. 
+Another advantage of the sigmoid function is that \citep{Barron} provides results stating that the approximation error when using sigmoid function is bounded by $C_f/\sqrt{n}$ where $C_f$ can be regarded as a constant and $n$ the number of nodes. This result thus indicates that as the number of nodes increase, the approximation error decreases. Nevertheless, this is only stated for the sigmoid function, whilst \citep[s. 117]{Barron} states that similar results can be obtained for multiple other activation functions.
+
+
+
+% It is possible to specify the difference of the target function, $f$, and a function, $\hat{f}_\theta$, approximated by a neural network further, if $\hat{f}_\theta$ is approximated using least square error. Hence, the function minimises the sum of squared differences between the predicted outputs and real values. That is,
+% \begin{align}\label{eq:brugi_estimation_bounds}
+%     \hat{f}_{\bm{\theta}}(\bm{x}) &= \hat{f}_{\hat{\bm{\theta}}}(\bm{x}), \\
+%     \hat{\theta} &= \arg \min_{\bm{\theta} \in \Theta} \left(\frac{1}{N} \sum_{i = 1}^N \left(y_i - \hat{f}_{\theta}(\bm{x_i})\right)^2 \right)
+% \end{align}
+% for some finite set $\Theta$ and $N$ input-output pairs $(\bm{x_i}, y_i)$ drawn from the distribution of the data. 
+
+% % Under these assumptions the following theorem provides an indicating of how the number of nodes and the training data set size affects the approximation error when using the sigmoid function as the activation function. 
+% % \begin{thm}[Estimation bounds for Neural Networks]\label{Thm:estimation_bounds}
+% %     Let the set of neural networks $\mathcal{NN}^g_{K_0, 1, 2}$ be given as in \autoref{def:NN} with the restrictions given in the beginning of the section. Let the activation function be given as $g(x) = \frac{\exp{(x)}}{\exp{(x)}+1}$. Furthermore, let estimator $\hat{f}_{\bm{\theta}}$ be given as \eqref{eq:brugi_estimation_bounds}. Then the global accuracy of the estimator, measured by the mean integrated squared error, satisfies
+% %     \begin{align}\label{Eq:Estimation_bounds}
+% %         \E{\norm{f-\hat{f}}_2^2} \leq \mathcal{O}\left(\frac{C^2}{n} \right) + \mathcal{O}\left(\frac{nd_0}{N} \log{(N)} \right) 
+% %     \end{align}
+% %     where $f: \R^{K_0} \to \R$ is the target function. Furthermore, $n$ denotes the number of nodes, $N$ the size of the training data set, and $C$ a constant.
+% % \end{thm}
+% % \begin{proof}
+% %     Omitted.
+% % \end{proof}
+
+% % The first term on the right side in \eqref{Eq:Estimation_bounds} decreases as the number of nodes increase. Though, it is also seen in the second term that the size of the training data set should increase as the number of nodes increases to keep the error down. Additionally, this helps prevent the neural network from overfitting. Nevertheless, \autoref{Thm:estimation_bounds} is only stated for the sigmoid function, whilst \citep[s. 117]{Barron} states that similar results can be obtained for multiple other activation functions.
+% The following theorem provides an indicating of how the number of nodes affects the approximation error when using the sigmoid function as the activation function. 
+% \begin{thm}[Estimation bounds for Neural Networks]\label{Thm:estimation_bounds}
+%     Let the set of neural networks $\mathcal{NN}^g_{K_0, 1, 2}$ be given as in \autoref{def:NN} with the restrictions given in the beginning of the section. Let the activation function $g$ be a sigmoid function. Furthermore, let the estimator $\hat{f}_{\bm{\theta}}$ be given as in \eqref{eq:brugi_estimation_bounds}. Then for data distributed under a probability measure $\mu$ its global accuracy satisfies 
+%     \begin{align}\label{Eq:Estimation_bounds}
+%         \norm{f-\hat{f}_\theta}_2 &\leq \frac{C_f}{\sqrt{n}},
+%     \end{align}
+%      where $f: \R^{K_0} \to \R$ is the target function. Furthermore, $n$ denotes the number of nodes, and $C_f$ a constant.
+% \end{thm}
+% \begin{proof}
+%     Omitted.
+% \end{proof}
+% The right hand term in \eqref{Eq:Estimation_bounds} decreases as the number of nodes, $n$, increases, meaning that the approximation error decreases for $n\to\infty$. 
+
+
+Despite the potential effectiveness of the single-layer neural networks, with multiple activation functions, their practicality is limited due to their exponential increase in dimension. Moreover, their high susceptibility to overfitting adds to their impracticality. When designing a neural network, a fundamental question arises regarding the optimal trade-off between its width and depth, where width and depth represents number of nodes in the layers and number of layers, respectively. Should one choose a narrow and deep network with multiple layers but fewer nodes per layer, or a shallow and wide network? Both empirical evidence and intuition suggest that depth plays a crucial role in the performance of a neural network. Deep architectures tend to result in complex models that are challenging to achieve with shallow networks, \citep{REOS}. In fact, Theorem 1 in \citep{REOS} states that the approximation of a function in a two layer neural network will require exponentially many nodes compared to a three layered neural network to gain the same accuracy. %Thus, when designing a neural network it is preferable that it is deep instead of wide. 
 
 %As briefly mentioned throughout the chapter, the goal is to describe the implied volatility function using neural networks. Thus, given the necessary theory to do so, the following chapter will implement a neural network that approximates the implied volatility function. 
 

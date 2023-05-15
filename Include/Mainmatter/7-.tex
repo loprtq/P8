@@ -1,0 +1,28 @@
+\section{Simulation Study}
+To test our codes capabilities of calculating the correct risk-neutral distribution we create a simulation study. In this simulation study we want to simulate the distribution of $S_T\mid S_t$ using the \emph{stochastic volatility} Heston model. The Heston model describes how the stock price $S_t$ evolves over time depending on numerous variables, such as the stochastic volatility $V_t$. Thus, under the risk-neutral measure $\Q$ we are, on matrix form, working with the \emph{stochastic differential equations}
+\begin{align}\label{Eq:EM}
+    \mathrm{d}\begin{bmatrix}S_t\\V_t\end{bmatrix} &= \begin{bmatrix}rS_t\\\alpha-\lambda V_t\end{bmatrix}\,\mathrm{d}t + \begin{bmatrix}S_t\sqrt{1-\rho^2}&S_t\rho\\0&\sigma_v\sqrt{V_t}\end{bmatrix}\,\mathrm{d}\begin{bmatrix}W^{(1)}_t\\W^{(2)}_t\end{bmatrix},
+\end{align}
+where $W^{(1)}$ and $W^{(2)}$ are Wiener processes. Furthermore, $\lambda$ is the rate at which $V_t$ reverts to the long variance $\alpha/\lambda$, $\rho$ the correlation between the Wiener processes, and $\sigma_v$ the volatility of the volatility. To simulate these stochastic differential equations we use the Euler-Maruyama method, \citep{Gatheral}. The Euler-Maruyama method numerically approximates \eqref{Eq:EM} by discretising to a partition $t=t_0<\dots<t_n=T$ for $n\in\N$. This partition is then used to define \eqref{Eq:EM} as a recursive equation given as
+\begin{align*}
+        \mathrm{d}\begin{bmatrix}S_{t_k}\\V_{t_k}\end{bmatrix} &= \begin{bmatrix}rS_{t_k}\\\alpha-\lambda V_{t_k}\end{bmatrix}\left(t_{k+1}-t_k\right) + \begin{bmatrix}S_{t_k}\sqrt{1-\rho^2}&S_{t_k}\rho\\0&\sigma_v\sqrt{V_{t_k}}\end{bmatrix}\begin{bmatrix}(W^{(1)}_{t_{k+1}}-W^{(1)}_{t_k})\\(W^{(2)}_{t_{k+1}}-W^{(2)}_{t_k})\end{bmatrix},\quad 0\leq k\leq n-1.
+\end{align*}
+For the purpose of our simulation study we set $S_t=100$, $V_t=0.2$, $\alpha=0.5$, $\lambda=0.5$, $\rho=0.7$, and $\sigma_v=0.1$ when generating prices. Being able to simulate $S_T\mid S_t$ we use Monte Carlo simulation \citep[p. 267]{Hull} to get enough data for it to be representative of the risk-neutral distribution. This process is repeated for each chosen time to maturity, $\tau=T-t$. 
+
+Additionally, these stock prices are used to calculate the option price using the formula
+\begin{align}
+    C(t,K) &= \exp(-r\tau)\E[\Q]{(S_T-K)^+\mid S_t}.
+\end{align}
+In practice, we simulate $100$ million values of $S_T\mid S_t$ and determine the mean of $\max(S_T-K,0)$ for all of these stock prices. We calculate option prices for values of $K$ and $\tau$ in $(0,250]$ and $(0,0.1]$, respectively. Given these option prices, we use the formula \eqref{Eq:IV_formula} to determined the implied volatility of the option, similar to before. All of this, meaning strike price, time to maturity, and implied volatility is then used to construct a neural network. The architecture of this neural network is chosen to be the same as in \autoref{Sec.App:Calculating_Option_Prices}, with strike price and time to maturity as inputs and implied volatility as output. This neural network gives us the implied volatility surface in \autoref{Figures:Figures/Pictures/SynVolSurf.png}. Compared to \autoref{Figures:Figures/Pictures/Application/vol_surfaceNN.pdf}, this neural network gives a very clear volatility skew (see \autoref{Sec.Implied_Volatility}) close to maturity time. Furthermore, we observe that the implied volatility for the options OTM vary more than those ITM.
+
+\imgfig[0.7]{Figures/Pictures/SynVolSurf.png}{Implied volatility surface generated from simulated data for $S_t=100$, strike price $K$, and time to maturity, $\tau=T-t$.}
+
+Given the approximation of the function for implied volatility we do as in \autoref{Sec.App:RND} and determine $\frac{\partial^2}{\partial K^2}C(t,K)$. As in \autoref{Sec.App:RND} we do so using the finite difference method to determine the derivatives for the implied volatility, and \eqref{Eq:RND_Derivatives}. Having determined all of the expressions in \eqref{Eq:RND_Derivatives}, we use $\frac{\partial^2}{\partial K^2}C(t,K)$ to determine the risk-neutral density using \eqref{Eq:App_RND}.
+
+For $\tau=0.07$ this yields the density on the left hand side of \autoref{Figures:Figures/Pictures/SynDens.pdf}. Comparing this density to the one given by Monte Carlo simulation (see right hand side of \autoref{Figures:Figures/Pictures/SynDens.pdf}), we observe that it is not as leptokurtic in comparison. It does, however, as we expect lie very close to $K=100$. Additionally, it integrates to $1$ despite its look, making this part of the result better than the one achieved for GOOG (see \autoref{Figures:Figures/Pictures/APP1/Densiteter_GOOG.pdf}). Furthermore, the one for GOOG is not as smooth, which could be due to data restraints or numerical errors.
+
+\imgfig[0.9]{Figures/Pictures/SynDens.pdf}{Actual risk-neutral density simulated using Monte Carlo and Euler-Maruyama (right), and calculated risk-neutral density using method described in \autoref{Sec.Calibration} (right).}
+
+Thus, the approach we also use for the stocks, seems to work very well, even though the implied volatility points are not smooth. As opposed to the densities calculated for the stocks, we will not use the density from the left hand side of \autoref{Figures:Figures/Pictures/SynDens.pdf} to determine option prices, as the purpose of this simulation study was to determine its effectiveness in estimating the risk-neutral density.
+
+

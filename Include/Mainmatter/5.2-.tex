@@ -1,0 +1,112 @@
+\section{Risk-Neutral Density}\label{Sec.App:RND}
+As the terms in \eqref{Eq:RND_Derivatives} have all been estimated, it is now possible to determine the risk-neutral density by rewriting \eqref{Eq:PartialC} to
+\begin{align}\label{Eq:App_RND}
+    \exp\left(r\tau\right)\frac{\partial^2}{\partial K^2}C(t,K) &= f^\Q(S_T\mid S_t),
+\end{align}
+under the condition that $K=S_T$. Recall that we set the risk-free interest rate to $r=0.0368$. As we already know the current stock price of GOOG ($S_t=100$), the only variable in \eqref{Eq:App_RND} yet to be set is the time to maturity. For the following two examples we set $\tau=0.07$ and $\tau=0.02$. This yields the density curves illustrated in \autoref{Figures:Figures/Pictures/APP1/Densiteter_GOOG.pdf}.
+
+\imgfig[1]{Figures/Pictures/APP1/Densiteter_GOOG.pdf}{Risk-neutral density for stock price $S_t=100$ and time to maturity $\tau=0.02$ (left) and $\tau=0.07$ (right).}
+
+In \autoref{Figures:Figures/Pictures/APP1/Densiteter_GOOG.pdf} we observe that for $\tau=0.07$ the risk-neutral density closely resembles that of a normal density with mean around $K=100$ which is ATM. This is to be expected as the discounted stock price is a martingale under the risk-neutral measure. Contrarily, for $\tau=0.02$ we observe that the risk-neutral density is not as smooth or closely resembles that of a normal distribution. This also results in its integration value of $0.715$ being lower that the one for $\tau=0.07$ which is $0.896$. This is rather unexpected as we can see in \autoref{Figures:Figures/Pictures/KDist.pdf} that there is more data available for $\tau\approx0.02$ compared to $\tau\approx0.07$. Hence, it was expected that the integration value for $\tau=0.02$ was closer to $1$ that the integration value for $\tau=0.02$.
+
+Furthermore, it is evident from both plots depicted in \autoref{Figures:Figures/Pictures/APP1/Densiteter_GOOG.pdf} that as the strike price deviates from the ATM, the density becomes more distorted or fluctuates more significantly. This phenomenon can be attributed to insufficient data during the training of the neural network at these specific points. Consequently, when the neural network predicts values for inputs with limited or no prior knowledge, it is more prone to making inaccurate predictions, which is reflected in the risk-neutral density.
+
+In general, when we integrate the risk-neutral densities for the stock price $S_t=100$ and a given time to maturity it integrates to less than 1. Hence, it is also expected that the option prices calculated using the risk-neutral are smaller than the real ones. This will be further investigated in the following section. 
+
+
+\section{Calculating Option Prices}\label{Sec.App:Calculating_Option_Prices}
+Given that we are able to determine the risk-neutral density, for all time to maturities, we should according to \eqref{Eq:RND_Pricing} be able to determine option prices given the current stock price $S_t=100$. Given what we observed in \autoref{Figures:Figures/Pictures/APP1/Densiteter_GOOG.pdf}, we expect the calculated option prices to be smaller than the real ones. Furthermore, when looking at the densities in the former section it could be expected that the results improve when being further from maturity time. To test these expectations, we sample $100$ random data points from the test set with varying time to maturities, $\tau$, and strike prices, $K$. Specifically, the distribution of $K$ and $\tau$ can be seen in \autoref{Figures:Figures/Pictures/APP1/KT_GOOG.pdf}. 
+
+\imgfig[1]{Figures/Pictures/APP1/KT_GOOG.pdf}{Distribution of the strike prices and time to maturities for the $100$ random points in the test set.}
+
+As seen in \autoref{Figures:Figures/Pictures/APP1/KT_GOOG.pdf}, the $100$ random point fairly well represent the distribution of the data in general seen in \autoref{Figures:Figures/Pictures/KDist.pdf} and \autoref{Figures:Figures/Pictures/TDist.pdf}. Hence, it is also possible to analyse whether the strike price and time to maturity affect the results. 
+
+The calculated prices (red) are presented in the left plot in \autoref{Figures:Figures/Pictures/APP1/realcalc_GOOG.pdf}, together with the real option prices (black). Furthermore, the error between the two is illustrated in the right plot, where the error is the calculated prices subtracted from the real price. 
+
+\imgfig[1]{Figures/Pictures/APP1/realcalc_GOOG.pdf}{Real- and calculated prices (left) and the calculated prices subtracted from the real price (right).}
+
+In the plot on the left hand side of \autoref{Figures:Figures/Pictures/APP1/realcalc_GOOG.pdf} we observe, as expected, that the calculated option prices are in general smaller than the real ones. Moreover, this is also seen in the right plot where the errors are only positive and hence the calculated prices are always below the real ones. Again, this is probably caused by the risk-neutral density integrating to less than one. The mean error of the calculated prices are approximately $2.18$. This does not seem as much, however, since the main part of the prices are between zero and five, this results in an percentage error of $300\%$. Hence, this indicates that this method does not predict the prices very well, which may be a consequence of using several numerical methods to determine the prices. We will return to this in the discussion, after we try using this method on several different underlying stocks, to see whether the results repeat themselves. 
+
+To examine whether the error depends on either strike prices or time to maturity we chose to plot the error with respect to the these, which can be seen in \autoref{Figures:Figures/Pictures/APP1/KT_fejl_GOOG.pdf}. 
+
+\imgfig[1]{Figures/Pictures/APP1/KT_fejl_GOOG.pdf}{The calculated prices subtracted from the real price with respect to strike price (left) and time to maturity (right).}
+
+In the left plot of \autoref{Figures:Figures/Pictures/APP1/KT_fejl_GOOG.pdf} we observe that there seems to be no clear relation between the error and strike price. We do, however, observe that as the strike price increases the error decreases slightly. Furthermore, we observe that there seems to be a clear relation between the error and time to maturity. Specifically, we observe that the errors are smaller for $\tau=0.02$ and $\tau=0.1$ with the errors in between these values being larger. This could be caused by the availability of data when training the neural network at these two points compared to the others (see \autoref{Figures:Figures/Pictures/TDist.pdf}). Hence, this indicates that the amount of data could be crucial when determining option prices.
+
+\section{Comparison of stocks}
+As mentioned in the beginning of the application, this project is not solely focused on GOOG, but also AAPL, AMZN and TSLA. As done with GOOG, we filter data for stock prices, such that we have a clear current stock price. For AAPL, AMZN and TSLA their current stock price is $165$, $103$ and $161$, respectively. Additionally, the data was filtered such that we are only working with time to maturities smaller or equal to $0.1$. The big difference between these underlying stocks and GOOG is that there are approximately twice as many data points, more precisely between $24.000$ and $26.000$. This also results in more training data, which might improve the training process of the neural network and hence also the accuracy of the network. However, we will not be performing the same tuning process as for GOOG, but we will implement this data into a neural network with the same architecture determined throughout \autoref{Sec.App:NN}. This could result in the opposite of more training data, that is, a worse performance because the hyperparameters are not tuned for these data sets.      
+
+Having filtered the data and calculated their respective implied volatilities, the implied volatility for AAPL, AMZN and TSLA is plotted in \autoref{Figures:Figures/Pictures/TAA/vol_AAPL.png}, \autoref{Figures:Figures/Pictures/TAA/vol_AMZN.png}, and \autoref{Figures:Figures/Pictures/TAA/vol_TSLA.png}, respectively. Comparing these to the one for GOOG, in \autoref{Figures:Figures/Pictures/Volatility Surface Scatter (GOOG).png}, we firstly observe that all of them have a volatility smile present close to maturity. Secondly, we observe that AMZN and TSLA are in general more level compared to both GOOG and AAPL further from maturity. Lastly, we observe for AMZN that it seems to have two parallel surfaces, one more than we were expecting. This could be caused by some numerical problems when calculating the implied volatility using \eqref{Eq:IV_formula}. However, we will not do anything to smoothen this surface, to see how a volatility surface which behaves very different affects the results. 
+
+\timgfig{Figures/Pictures/TAA/vol_AAPL.png}{Implied volatility of AAPL for $S_t=165$.}{Figures/Pictures/TAA/vol_AMZN.png}{Implied volatility of AMZN for $S_t=103$.}{Figures/Pictures/TAA/vol_TSLA.png}{Implied volatility of TSLA for $S_t=161$.}
+
+As we did for GOOG, we first look at how the strike prices and time to maturities are distributed for each of the stocks, to get an indication of what the data is being trained on. The distribution of these variables for AAPL, AMZN and TSLA can be seen in \autoref{Figures:Figures/Pictures/TAA/hist_AAPL.pdf}, \autoref{Figures:Figures/Pictures/TAA/hist_AAPL.pdf}, \autoref{Figures:Figures/Pictures/TAA/hist_AAPL.pdf}, respectively. Firstly, for AAPL we observe that the majority of strike prices are between $160$ and $170$, whilst the time to  maturities are fairly evenly spread out. Secondly, for AMZN we observe that the majority of strike prices are between $100$ and $110$, with the time to maturities leaning more to "far" from maturity. Lastly, for TSLA we observe that the strike prices are between $160$ and $180$, whilst the time to maturities are fairly spread out, with a bit more points close to maturity.
+
+Training a neural network with the same architecture for each of the stocks, presents the risk of both over- and underfitting. Hence, we look at how the MSE, MAE and MAPE evolve, for each of the stocks, during the training process of $1200$ epochs. These can be seen in \autoref{Figures:Figures/Pictures/TAA/fejl_aapl.pdf}, \autoref{Figures:Figures/Pictures/TAA/fejl_amzn.pdf}, and \autoref{Figures:Figures/Pictures/TAA/fejl_tsla.pdf} for AAPL, AMZN, and TSLA, respectively. For all of them there seems to be very little, if any, overfitting, which is desired. However, in all of them we see some variation in the error of the validation set. 
+
+Moreover, we evaluate each network by calculating the MSE, MAE and MAPE for each of them on the test sets. The values can be seen in \autoref{Tab:APP:MSE MAE MAPE}, with the takeaway being that AAPL has a better general performance than both GOOG, AMZN and TSLA. Likewise, TSLA's performance is not much worse than GOOG's performance, with it only having a MAPE $0.7\%$ higher. On the opposite end of the spectrum is AMZN's performance, which is not as good as the others. This could be caused by the implied volatility surface in \autoref{Figures:Figures/Pictures/TAA/vol_AMZN.png} not being as smooth as the others, making it difficult for the neural network to approximate it.
+
+\begin{table}[H]
+    \centering
+    \subcaptionbox{AAPL}{
+        \begin{tabular}{c|c}
+            MSE  &  0.8565e-5\\ \hline
+            MAE  &  5.2188e-3\\ \hline
+            MAPE &  1.7590\%\\ 
+        \end{tabular}
+    }
+    \hfill
+    \subcaptionbox{AMZN}{
+        \begin{tabular}{c|c}
+            MSE  &  0.0015\\ \hline
+            MAE  &  0.0259\\ \hline
+            MAPE &  6.3934\%\\ 
+        \end{tabular}
+    }
+    \hfill
+    \subcaptionbox{TSLA}{
+        \begin{tabular}{c|c}
+            MSE  &  0.0006\\ \hline
+            MAE  &  0.01624\\ \hline
+            MAPE &  2.8651\%\\ 
+        \end{tabular}
+    }
+    \hfill
+    \caption{MSE, MAE and MAPE the the test set of AAPL, AMZN and TSLA.}
+    \label{Tab:APP:MSE MAE MAPE}
+\end{table}
+
+The implied volatility surface created by these neural networks are illustrated in \autoref{Figures:Volatility_Surfaces} for AAPL, AMZN and TSLA, respectively. For both AAPL and TSLA their surfaces are relatively smooth, with AAPL's being more symmetric around ATM whilst TSLA's is more skewed towards OTM. On the contrary, the implied volatility surface for AMZN reflects what we saw in \autoref{Figures:Figures/Pictures/TAA/vol_AMZN.png}, namely that it tries to approximate the two surfaces which results in a surface with some dips, instead of a smoother surface as the two other stocks. The reason why it is actually possible for the network to model the data as well as it does, could be because the training data set is quite big and it hence has the possibility to replicate this behaviour, or it could be caused by the ratio between parameters and data. This will be discussed further at a later point in the project. 
+
+\timgfigto{Figures/Pictures/TAA/volsurf_AAPL.png}{Figures/Pictures/TAA/volsurf_AMZN.png}{Figures/Pictures/TAA/volsurf_TSLA.png}{Volatility surface of respectively AAPL, AMZN, and TSLA from neural networks compared with their test data sets (orange points).}{Volatility_Surfaces}
+
+Wanting to test how these neural networks performed on their respective test sets, we used prediction plots, to determine their capabilities. The prediction plots for AAPL, AMZN and TSLA can be seen in \autoref{Figures:Figures/Pictures/TAA/pred_real_aapl.pdf}, \autoref{Figures:Figures/Pictures/TAA/pred_real_amzn.pdf}, and \autoref{Figures:Figures/Pictures/TAA/pred_real_tsla.pdf}, respectively. As with GOOG, both the theoretical best regression and the actual linear regression lines are illustrated in black and blue, respectively. To empirically summarise their capabilities, the linear regressions $R^2$ values were calculated, these being: $0.97$, $0.85$, and $0.97$ for AAPL, AMZN and TSLA, respectively. Again, what this indicates is that AMZN's performance is poor compared to the others, whilst AAPL and TSLA actually perform better than GOOG (see \autoref{Figures:Figures/Pictures/Application/lineplot.pdf} and \autoref{tab:summary_af_lm}).
+
+Given a neural network for each of the stocks, we move on to determine their risk-neutral densities. For AAPL, AMZN and TSLA we choose to look at the same two different time to maturities as for GOOG, $\tau=0.02$ and $\tau = 0.07$, with their respective risk-neutral densities illustrated in \autoref{Figures:Figures/Pictures/APP1/Densiteter_AAPL.pdf}, \autoref{Figures:Figures/Pictures/APP1/Densiteter_AMZN.pdf}, and \autoref{Figures:Figures/Pictures/APP1/Densiteter_TSLA.pdf}. In all of these densities, a distinct pattern can be observed, similar to what was observed for GOOG. Specifically, as the strike price deviates further from ATM, the densities becomes increasingly more distorted or fluctuates more significantly. Additionally, for the densities associated with AMZN, even ATM, there is a slight degree of instability. This could be explained by the error of the network for the implied volatility for AMZN in general being larger than for the other stocks. Lastly, when integrating the densities for the three stock we get that they all integrates to something smaller than one. For AAPL and the two time to maturity they integrate to $0.78$ and $0.76$, respectively, for AMZN it is $0.82$ and $0.665$, and for TSLA it is $0.54$ and $0.647$. This indicates, as for GOOG, that the calculated prices will be smaller that the real ones. Furthermore, from this very small sample it indicates that TSLA is performing the worst, which is surprisingly since AMZN in general performed worse in every metric when looking at the neural networks.
+
+To test how well these risk-neutral densities perform in general, we choose $100$ random points from their respective test sets and compare the real prices to those calculated using the risk-neutral densities. These points and their distribution for each stock can be seen in \autoref{Figures:Figures/Pictures/APP1/KT_AAPL.pdf}, \autoref{Figures:Figures/Pictures/APP1/KT_AMZN.pdf} and \autoref{Figures:Figures/Pictures/APP1/KT_TSLA.pdf} with the calculated prices and their error seen in \autoref{Figures:Figures/Pictures/APP1/realcalc_AAPL.pdf}, \autoref{Figures:Figures/Pictures/APP1/realcalc_AMZN.pdf} and \autoref{Figures:Figures/Pictures/APP1/realcalc_TSLA.pdf}. 
+
+\vspace{-1.5em}\imgfig[1]{Figures/Pictures/APP1/realcalc_AAPL.pdf}{Real- and calculated prices (left) and the calculated prices subtracted from the real price (right) for AAPL.}\vspace{-3em}
+\imgfig[1]{Figures/Pictures/APP1/realcalc_AMZN.pdf}{Real- and calculated prices (left) and the calculated prices subtracted from the real price (right) for AMZN.}\vspace{-3em}
+\imgfig[1]{Figures/Pictures/APP1/realcalc_TSLA.pdf}{Real- and calculated prices (left) and the calculated prices subtracted from the real price (right) for TSLA.}\vspace{-0.5em}
+
+For a quick summary of the results achieved from these $100$ points, see \autoref{Tab:App:OP_Errors}.
+
+\begin{table}[H]
+     \centering
+     \begin{tabular}{c|cc}
+               & Mean Error & Mean Percentage Error \\ \hline
+          AAPL & $1.1809$ & $103.4964\%$ \\
+          AMZN & $1.5657$ & $902.5436\%$ \\
+          TSLA & $1.1685$ & $99.4070\%$
+     \end{tabular}
+     \caption{Mean error and mean percentage error between real and calculated option prices for AAPL, AMZN, aand TSLA for 100 random point from their respective test sets.}
+     \label{Tab:App:OP_Errors}
+ \end{table}
+
+Looking at the values in \autoref{Tab:App:OP_Errors} we clearly see the same behaviour as for GOOG, that is, the mean errors being fairly small but having an enormous mean percentage error. This is again explained by the fact that most prices are below five, and hence an even small error is a large percentage error. Furthermore, when looking at \autoref{Figures:Figures/Pictures/APP1/realcalc_AAPL.pdf}, \autoref{Figures:Figures/Pictures/APP1/realcalc_AMZN.pdf} and \autoref{Figures:Figures/Pictures/APP1/realcalc_TSLA.pdf}, it is clear that the prices which are calculated using the risk-neutral density are always smaller than the real ones. This was again to be expected after analysing the risk-neutral densities for the stocks earlier in the section. The two examples of densities for the three stock indicated that TSLA in general would perform the worst, nevertheless we see that it outperforms not only AAPL and AMZN, but also GOOG which had a mean percentage error of approximately $300\%$. The results for GOOG are not only outperformed by TSLA but also AAPL with approximately $200\%$, where in both cases this could be caused by a general better performance of the neural network potentially due to more data. Lastly, the noticeable bad performance for AMZN could again be caused by the not smooth implied volatility surface, which not only affects the values for implied volatility but also the derivatives drastically. 
+
+In general, we see that this method of predicting the option prices is fairly unstable among other things because of small option prices. Again, this could be explained by the implied volatility surface, both the one constructed by the data and the neural network, not being smooth. This will also affect the derivatives of the implied volatility which are used to construct the risk-neutral density, and hence affecting the final result. Furthermore, we have seen by comparing the results for GOOG and AMZN that just because there are more data for the neural network to trained upon the results will not necessarily improve. However, this can very well also be because this network was specifically tuned to perfect the performance with respect to the data for GOOG. However, comparing GOOG, AAPL and TSLA there is an indication of an improvement when having more data. Hence, the worse results for AMZN are probably caused by something else. Lastly, we can conclude that this method still gives an error of at least $100$ percent or more, which is not optimal. This could be caused by using multiple numerical approximation methods to get the final result, such as the neural network, the derivatives of this and the integral in \eqref{Eq:RND_Pricing}. All of this will be further discussed in \autoref{Ch.Discussion}. To address the problem of using a lot of numerical approximation methods we will try to use neural networks to approximate the option price function instead of the implied volatility function. 
+
+
+ 

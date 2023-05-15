@@ -62,7 +62,7 @@
 
 
 \WarningsOff*\usepackage{xassoccnt}
-\DeclareCoupledCounters[name=figurteo]{figure,theo, defi, lemm, propo, corol, exam}\WarningsOn
+\DeclareCoupledCounters[name=figurteo]{table, figure, theo, defi, lemm, propo, corol, exam}\WarningsOn
 
 
 % Theorems, definitions etc. ----------------------------------------------------
@@ -142,5 +142,57 @@
       \caption{#5}
       \label{Figures:#4}
     \end{minipage}
+  \end{figure}
+}
+
+\newcommand{\timgfig}[6]{
+  \begin{figure}[H]
+    \centering
+    \hfill
+    \begin{minipage}[t]{0.325\textwidth}
+      \centering
+      \includegraphics[width=\linewidth]{#1}
+      \caption{#2}
+      \label{Figures:#1}
+    \end{minipage}
+    \hfill
+    \begin{minipage}[t]{0.325\textwidth}
+      \centering
+      \includegraphics[width=\linewidth]{#3}
+      \caption{#4}
+      \label{Figures:#3}
+    \end{minipage}
+    \hfill
+    \begin{minipage}[t]{0.325\textwidth}
+      \centering
+      \includegraphics[width=\linewidth]{#5}
+      \caption{#6}
+      \label{Figures:#5}
+    \end{minipage}
+    \hfill
+  \end{figure}
+}
+
+\newcommand{\timgfigto}[5]{
+  \begin{figure}[H]
+    \centering
+    \hfill
+    \begin{minipage}[t]{0.325\textwidth}
+      \centering
+      \includegraphics[width=\linewidth]{#1}
+    \end{minipage}
+    \hfill
+    \begin{minipage}[t]{0.325\textwidth}
+      \centering
+      \includegraphics[width=\linewidth]{#2}
+    \end{minipage}
+    \hfill
+    \begin{minipage}[t]{0.325\textwidth}
+      \centering
+      \includegraphics[width=\linewidth]{#3}
+    \end{minipage}
+    \hfill
+      \caption{#4}
+      \label{Figures:#5}
   \end{figure}
 }
