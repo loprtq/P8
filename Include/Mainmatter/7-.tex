@@ -41,8 +41,4 @@ The MAPE of the calculated option prices when using the sigmoid function as the 
 
 Comparing \autoref{Figures:Figures/Pictures/SynDensSigmoid.pdf} and \autoref{Figures:Figures/Pictures/SynCalcSigmoid.pdf} to the ones using the ReLU activation function we observe that the MAPE in this case is especially affected by one point which has a large absolute percentage error of over $1000\%$, whereas otherwise the two seem to have similar prediction accuracy. 
 
-Based on the results achieved for GOOG as well as in this simulation study we will be focusing on the neural network which has ReLU as the activation function in the hidden layers.
-
-Additionally, we expect to see large error for the remainder of the other stocks, as the 100 random points used in this section where not as small as the ones used for GOOG and it thus not being directly comparable. 
-
-as the 100 random points used this section are not as small as the ones for GOOG, the two assessments are not comparable. 
+Based on the results achieved for GOOG as well as in this simulation study we will be focusing on the neural network which has ReLU as the activation function in the hidden layers. As the $100$ random points used in this section does not have as small option prices as the ones for GOOG, the two assessments are not directly comparable. We do, however, expect that the prices for the $100$ random points for the other stocks will also have have a large percentage error as the one achieved for GOOG, as the majority of the option prices are close to $0$. In general, the results for GOOG and the simulation study indicate that this method of determining the option prices gives a high percentage error which is not desirable. 
