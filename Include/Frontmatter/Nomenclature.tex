@@ -5,13 +5,13 @@
 
 
 \makenomenclature
+% \renewcommand{\nompreamble}{
+% The nomenclature describes several symbols and functions that will be used within the report.
+% }
 \renewcommand{\nompreamble}{
-The nomenclature describes several symbols and functions that will be used within the report.
-}
-%\renewcommand{\nompreamble}{
-% The nomenclature describes several symbols that will be used within the report.
-% \begin{multicols*}{2}}
-%\renewcommand{\nompostamble}{\end{multicols*}}
+The nomenclature describes several symbols that will be used within the report.
+\begin{multicols*}{2}}
+\renewcommand{\nompostamble}{\end{multicols*}}
 
 \begingroup
 \makeatletter
@@ -22,17 +22,51 @@ The nomenclature describes several symbols and functions that will be used withi
 \printnomenclature\label{Nomenclature}
 % https://www.overleaf.com/learn/latex/nomenclatures
 
-% \nomenclature[Category]{Symbol}{Description}
+% Kapitel 2
+\nomenclature[]{$\Q$}{Risk-neutral measure}
 \nomenclature[]{$C^M$}{Market's call option price}
 \nomenclature[]{$C^{BS}$}{Black Scholes call option price}
-\nomenclature[]{$\IV{\cdot}$}{Implied Volatility}
-\nomenclature[]{$\mathcal{N}\mathcal{N}$}{Set of neural networks}
-\nomenclature[]{$g$}{Activation function}
-\nomenclature[]{$\pazocal{W}$}{Weights}
-\nomenclature[]{$L$}{Loss function}
-\nomenclature[]{$\norm{\cdot}_2$}{$L^2$-norm}
-\nomenclature[]{$\rho$}{}
-\nomenclature[]{$\alpha$}{}
-\nomenclature[]{$\alpha_f$}{}
+\nomenclature[]{$\pazocal{P}$}{Pricing model}
+\nomenclature[]{$\beta$}{Fixed model parameters}
+\nomenclature[]{$\theta$}{Model parameters}
+\nomenclature[]{$\pazocal{C}$}{Metric}
+\nomenclature[]{$\hat{\theta}$}{Estimated model parameters}
+\nomenclature[]{$\Theta$}{Set of parameters}
+\nomenclature[]{$\IV{\cdot}$}{Implied volatility function}
+\nomenclature[]{$C$}{Option price}
+\nomenclature[]{$f_\Q(\cdot)$}{Risk-neutral density function}
+\nomenclature[]{$\mathcal{F}_t$}{Sub-$\sigma$-algebra}
+\nomenclature[]{$\Phi(\cdot)$}{Pay-off function}
+\nomenclature[]{$S_t$}{Stock price}
+\nomenclature[]{$K$}{Strike price}
+\nomenclature[]{$T$}{Maturity time}
+\nomenclature[]{$\tau$}{Time to maturity}
+\nomenclature[]{$r$}{Risk-free interest rate}
 
+
+% Kapitel 3
+\nomenclature[]{$x_i$}{Explanatory variable}
+\nomenclature[]{$y_i$}{Dependent variable}
+\nomenclature[]{$b^{(i)}$}{Bias term in $i$'th layer}
+\nomenclature[]{$g_i(\cdot)$}{Activation function}
+\nomenclature[]{$w_i$}{Weights}
+\nomenclature[]{$\hat{y_i}$}{Prediction of $y_i$}
+\nomenclature[]{$K_i$}{Nodes in $i$'th layer}
+\nomenclature[]{$A^{(i)}$}{Value of nodes in $i$'th layer}
+\nomenclature[]{$\mathcal{N\mkern-5mu N}$}{Set of neural networks}
+\nomenclature[]{$\hat{f}_\theta(\cdot)$}{Function approximated using neural networks}
+\nomenclature[]{$\pazocal{W}$}{Set of weights}
+\nomenclature[]{$W^{(i)}$}{Weights in $i$'th layer}
+\nomenclature[]{$L(\cdot)$}{Loss function}
+\nomenclature[]{$L_{\bm x}(\cdot)$}{Individual loss function}
+\nomenclature[]{$\rho$}{Learning rate}
+\nomenclature[]{$\delta^{(i)}$}{Error term in $i$'th layer}
+\nomenclature[]{$z^{(i)}$}{Pre-activation in $i$'th layer}
+\nomenclature[]{$\alpha$}{Decay rate}
+\nomenclature[]{$\alpha_f$}{Decay rate}
+\nomenclature[]{$\mathbb{B}$}{Minibatch}
+\nomenclature[]{$F_i$}{First order gradient}
+\nomenclature[]{$\gamma_i$}{Exponentially averaged aggregated squared gradient}
+\nomenclature[]{$\norm{\cdot}_2$}{$L^2$-norm}
+% \nomenclature[]{$C_f$}{}
 \endgroup
