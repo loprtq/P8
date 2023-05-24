@@ -1,41 +1,21 @@
-\chapter{Finite Difference}\label{Ch.4}
-This chapter is based upon \citep{Hull}, unless stated otherwise.
-
-As mentioned in \autoref{Ch.2}, the finite difference method will be used to determine the derivatives of the implied volatility seen in \eqref{Eq:RND_Derivatives}. The principle of the finite difference method is to numerically solve ordinary differential equations using difference quotients \citep{Hull}. Consider the Taylor series for a function $f\in C^{\infty}$
+\section{Finite Difference}\label{Ch.4}
+As mentioned, the finite difference method will be used to determine the derivatives of the implied volatility function seen in \eqref{Eq:RND_Derivatives}. The principle of the finite difference method is to numerically approximate ordinary differential equations using difference quotients. Consider the Taylor series for a function $f\in C^{\infty}$
 \begin{align}\label{eq:central_diff}
     f(a) &= \sum_{k=0}^\infty \frac{\partial^k f(t)}{\partial t^k}\frac{1}{k!}(a-t)^k, \nonumber %+ o\left((x-a)^{k}\right),
-\intertext{then it can be rewriting in terms of the central difference operator, which yields}
+\intertext{then it can be rewritten in terms of the central difference operator, which yields}
     f(t+\Delta) - f(t-\Delta) &= \sum_{k=0}^\infty \frac{\partial^k f(t)}{\partial t^k}\frac{1}{k!}(\Delta)^k - \sum_{k=0}^\infty \frac{\partial^k f(t)}{\partial t^k}\frac{1}{k!}(-\Delta)^k \nonumber \\
-    &=2\frac{\partial f(t)}{\partial t}\Delta + 2\frac{\partial^3 f(t)}{\partial t^3}\frac{1}{3!}(\Delta)^3 + 2\frac{\partial^5 f(t)}{\partial t^5}\frac{1}{5!}(\Delta)^5 + \cdots. \nonumber
-\intertext{Isolating for the first order derivative, and determining the error for the higher order derivatives yield}
+    &= 2\frac{\partial f(t)}{\partial t}\Delta + 2\frac{\partial^3 f(t)}{\partial t^3}\frac{1}{3!}(\Delta)^3 + 2\frac{\partial^5 f(t)}{\partial t^5}\frac{1}{5!}(\Delta)^5 + \cdots. \nonumber
+\intertext{Isolating for the first order derivative yields}
     \frac{\partial f}{\partial t} &= \frac{f(t+\Delta)-f(t-\Delta)}{2\Delta}+o(\Delta^2),
 \end{align}
-which is called the \emph{central difference} method. In \eqref{eq:central_diff}, the error term $o(\Delta^2)$ is, as mentioned, the collection of the higher order derivatives. Likewise, if one were to use the forward- or backward difference operator the results would be
+which is called the \emph{central difference} method. In \eqref{eq:central_diff}, the error term $o(\Delta^2)$ is the collection of the higher order derivatives. Likewise, if one were to use the forward- or backward difference operator the results would be
 \begin{align*}
     \frac{\partial f}{\partial t}=\frac{f(t+\Delta)-f(t)}{\Delta}+o(\Delta)\quad\textrm{and}\quad\frac{\partial f}{\partial t}=\frac{f(t)-f(t-\Delta)}{\Delta}+o(\Delta),
 \end{align*}
-named accordingly. As the project also concerns approximating second order derivatives, the second order central difference method is given as
+named accordingly. As this project also requires approximating second order derivatives, the second order central difference method is given as
 \begin{align*}
     \frac{\partial^2 f}{\partial t^2} &= \frac{f(t+\Delta) - 2f(t) + f(t-\Delta)}{\Delta^2}+o(\Delta^2),
 \end{align*}
 where its derivation is similar to the first order central difference method.
 
-In the equations above $o(\Delta)$, and $o(\Delta^2)$ decrease as $\Delta$ decreases, minimising the error of the derivative. Naturally, $o(\Delta^2)$ decreases the fastest for $|\Delta|<1$, why the central difference method is often used in cases where both methods are applicable. This is coherent with the methods, without their respective error terms, being good approximations if $\Delta$ is small.
-
-To conclude, given a neural network or another function estimating method which produces a smooth enough function, finite difference can be easily implemented, especially for lower order derivatives. 
-
-
-%\section{Partial Differential Equation}\label{Sec.Finite_Difference}
-%The finite difference methods use cases can also be extended further than simply approximating derivatives; its methodology can be implemented to describe partial differential equations (PDEs). Given a solution to such a PDE, this solution can be approximated using the finite difference methods described beforehand.
-
-%For the Black-Scholes equation, the derivatives are with respect to time $t$ and stock prices $S$. As such, for the finite difference method to be useful, one has to discretise the domain of these two variables on which the finite difference method will be applied. To visually aid this description see \autoref{Figure:Finite_Difference}.
-%\input{Figures/TikZ/FD}
-%More precisely, the domain is discretised into partitions $t_0<t_1<\dots<t_n$ and $S_0<S_1<\dots<S_n$ where $n,m\in\N$. Thus, given that the domains are equidistantly spaced, the method will also give an equidistant grid, as the one seen in \autoref{Figure:Finite_Difference}. Given that one has to iteratively determine the points of the solution one might have to condition the boundaries of the grid. For Black-Scholes, these \emph{boundary conditions}, as they are called, are given as $(S-K)^+$ for time $T$ and $0$ for $S=0$
-
-
-%\subsection{Stability}
-%A problem with some of the finite difference methods with regards to solving PDEs is that the methods might explode. 
-
-
-%\subsection{Calibration}
-%As the finite difference method can be used to describe PDEs of a model, it can also be used to calibrate models. In practice, this does however, require that the price of an option is known as every point which could be evaluated. In the case of the Black-Scholes model, the only parameter which can be calibrated is its volatility.
+In the equations above $o(\Delta)$, and $o(\Delta^2)$ decrease as $\Delta$ decreases, minimising the error of the derivative. Naturally, $o(\Delta^2)$ decreases the fastest for $|\Delta|<1$, why the central difference method is often used rather than the forward- and backward difference methods. To summarise, these methods, without their respective error terms, are good approximations for small $\Delta$. Hence, given a neural network, or another function approximating method, which produces a smooth enough function, finite difference can be easily implemented, especially for lower order derivatives.

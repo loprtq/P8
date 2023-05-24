@@ -1,17 +1,18 @@
-\chapter{Application 2}\label{Ch:app2}
-As mentioned before we will now try and fit a neural network to the price function instead of to the implied volatility smile. We will do this using the same network architecture chosen in \autoref{Ch.5} due to time restrictions, and hence these results, as the ones in \autoref{Ch.5} for AAPL, AMZN and TSLA, can potentially become better if tuning the network for the specific data. In this chapter we will only be looking at the performance of this method on the underlying stock GOOG and hence compare the method with the results achieved in the former chapter for this stock. 
+\chapter{Application of Neural Networks for the Option Pricing Function}\label{Ch:app2}\chaptermark{Application 2}
+As mentioned before, we will try training a neural network to approximate the option pricing function instead of the implied volatility function. We will do this using the same network architecture chosen in \autoref{Ch.5} due to time restrictions, and hence these results, as the ones in \autoref{Ch.5} for AAPL, AMZN, and TSLA, can potentially become better if the neural network was tuned for this specific data. In this chapter we will only be looking at the performance of this method on the underlying stock GOOG and hence compare the method with the results achieved in the former chapter for this stock.
 
-We will again have two nodes in the input layer representing the strike price and time to maturity, and one node in the output layer representing the option price. Furthermore, we will be normalising the inputs for the same reasons described in \autoref{Ch.5}. First we sort the data as we did in the former chapter by looking at time to maturity up to $0.1$ and ATM at $100$, and hence we still have $11.000$ data points which we split in training, validation and test set. Note that these sets are identical to the ones in the former chapter in the analysis for GOOG for the sake of comparing the results. In the graph below, \autoref{Figures:Figures/Pictures/Application2/Prices.png}, the prices are plotted against strike price and time to maturity.
+We will again have two nodes in the input layer representing the strike price and time to maturity, and one node in the output layer representing the option price. Furthermore, we will be normalising the inputs for the same reasons as described in \autoref{Ch.5}. First we sort the data as we did in \autoref{Ch.5} by looking at time to maturity up to $0.1$ and ATM at $100$, and hence we still have approximately $11.000$ data points which we split into training-, validation-, and test set. Note that these sets are identical to the ones in the former chapter in the analysis for GOOG for the sake of comparing the results. In the graph below, \autoref{Figures:Figures/Pictures/Application2/Prices.png}, the prices are plotted against strike price and time to maturity.
 
-\imgfig[0.6]{Figures/Pictures/Application2/Prices.png}{Option Prices for GOOG for $S_t = 100$.}
+\imgfig[0.6]{Figures/Pictures/Application2/Prices.png}{Option prices for GOOG for $S_t = 100$.}
 
-In \autoref{Figures:Figures/Pictures/Application2/Prices.png} the prices seem to follow a smooth curve which is approximately $0$ when OTM and rises the further ITM one gets. The reason for this is that the option does not have any intrinsic value OTM because exercising it would not be profitable. Hence, a potential investor would only be paying for the potential of the option becoming profitable in the future. Furthermore, since we only look at time to maturity up till $0.1$ this potential is not very high, at least not for GOOG. As the call option gets further ITM the option begins to have intrinsic value which leads to a higher option price.
+In \autoref{Figures:Figures/Pictures/Application2/Prices.png} the prices seem to follow a smooth curve which is approximately $0$ when OTM and rises the further ITM it gets. The reason for this is that the option does not have any intrinsic value OTM because exercising it would not be profitable. Hence, a potential investor would only be paying for the potential of the option becoming profitable in the future. Furthermore, since we only look at time to maturity up to $0.1$ this potential is not very high, at least not for GOOG. As the call option gets further ITM the option begins to have an intrinsic value which leads to a higher option price.
 
-After sorting and splitting the data, we train the neural network using the training data and again use the validation set to check for any indication of overfitting. The MSE, MAE and MAPE during the $1200$ epochs in the training process can be seen in \autoref{Figures:Figures/Pictures/Application2/fejl_C.pdf}. Here it can be seen that there are no indication of overfitting in either of the errors throughout the training process. 
+After sorting and splitting the data, we train the neural network using the training set and again use the validation set to check for any indication of overfitting. The MSE, MAE and MAPE during the $1200$ epochs in the training process can be seen in \autoref{Figures:Figures/Pictures/Application2/fejl_C.pdf}. Here it can be seen that there are no indication of overfitting in either of the errors throughout the training process. 
 
-\imgfig[1]{Figures/Pictures/Application2/fejl_C.pdf}{MSE and MAE on training and validation set.}
+\imgfig[1]{Figures/Pictures/Application2/fejl_C.pdf}{MSE, MAE and MAPE on training- and validation set during training of the
+neural network.}
 
-Hence, we will use this network to predict the option prices given a strike price and time to maturity. To evaluate the overall performance of the network we determine the MSE, MAE and MAPE for the test set, the result of which can be seen in the following table, \autoref{Table:NN21}. 
+Hence, we will use this network to predict the option prices given a strike price and time to maturity. To evaluate the overall performance of the network we look at the MSE, MAE and MAPE for the test set, seen in \autoref{Table:NN21}.
 
 \begin{table}[H]
     \centering
@@ -20,34 +21,35 @@ Hence, we will use this network to predict the option prices given a strike pric
         MAE  &  0.1362\\ \hline
         MAPE &  10.5423 \%\\ 
     \end{tabular}}
-    \caption{MSE, MAE and MAPE for the test data set.}
+    \caption{MSE, MAE and MAPE for the test set.}
     \label{Table:NN21}
 \end{table}
 
-In \autoref{Table:NN21} we see the same tendency as in \autoref{Figures:Figures/Pictures/Application2/fejl_C.pdf}, namely that even though the MSE and MAE seem fairly small, the MAPE is approximately $10\%$. The reason for this is probably that the majority of the option prices in the data set are below $5$ and hence a small error can still be a large percentage error. The small error can also be seen when plotting the surface of the price function against strike price and time to maturity together with the test set, \autoref{Figures:Figures/Pictures/Application2/C_surf.png}. In \autoref{Figures:Figures/Pictures/Application2/C_surf.png}, it can again be seen that the surface produced by the neural network resembles that of the data fairly well. This is also evident when plotting the predictions from the network against the real prices (see \autoref{Figures:Figures/Pictures/Application2/linje_C.pdf}), which gives a $R^2 = 0.994$. Hence, comparing this value with the one obtained in \autoref{Sec.App:NN} at $0.94$ it could indicate that this method already performs better. However, note that the neural network in \autoref{Sec.App:NN} estimates the implied volatility, why the comparison is only an indication of performance and not a direct comparison.
+In \autoref{Table:NN21} we see the same tendency as in \autoref{Figures:Figures/Pictures/Application2/fejl_C.pdf}, namely that even though the MSE and MAE seem fairly small, the MAPE is approximately $10\%$. The reason for this is probably that the majority of the option prices in the data set are below $5$ and hence a small error can still be a large percentage error. The small errors for this neural network are obvious in both \autoref{Figures:Figures/Pictures/Application2/C_surf.png}, where the implied volatility surface and test set is plotted, as well as in the prediction plot, \autoref{Figures:Figures/Pictures/Application2/linje_C.pdf}, where the achieved linear regression has a $R^2=0.994$. Comparing this to the one obtained in \autoref{Sec.App:NN} at $0.94$ it could indicate that this method already performs better. However, note that the neural network in \autoref{Sec.App:NN} estimates the implied volatility function, why the comparison is only an indication of performance and not a direct comparison.
 
-\imgfig[0.6]{Figures/Pictures/Application2/C_surf.png}{Option price surface from neural network with test data set (orange points).}
+\imgfig[0.6]{Figures/Pictures/Application2/C_surf.png}{Option price surface from neural network with test set (orange points).}
 
-To compare the results of this neural network further with those presented in \autoref{Ch.5} we compare the real prices of the same $100$ random points chosen in \autoref{Ch.5} for GOOG, with those generated by this neural network. The error of this set of points are presented in, \autoref{Figures:Figures/Pictures/Application2/fejl_c.pdf}.
+To compare the results of this neural network further with those presented in \autoref{Ch.5} we compare the real prices of the same $100$ random points chosen in \autoref{Ch.5} for GOOG, with those calculated by this neural network. The absolute percentage error of this set of points can be seen in \autoref{Figures:Figures/Pictures/Application2/fejl_c.pdf}.
 
-\imgfig{Figures/Pictures/Application2/fejl_c.pdf}{Error for $100$ random points from the test set.}
+\imgfig{Figures/Pictures/Application2/fejl_c.pdf}{Absolute percentage error for $100$ random points from the test set.}
 
-Furthermore, the mean percentage error for the $100$ random points is $8.04\%$, which is well below the results using the risk-neutral density at approximately $300\%$. Hence, this indicates that the method of using a neural network where option prices are a direct output perform better in general than the method using the risk-neutral density. Nevertheless, the results achieved tell us that the method could be viable, given some tuning towards the specific purpose.
+Furthermore, the MAPE for the $100$ random points is $10.04\%$, which is well below the results when using the risk-neutral density at approximately $300\%$. Hence, this indicates that the method of constructing a neural network where option prices are a direct output performs better in general than the method using the risk-neutral density. Nevertheless, the results achieved tell us that the method could be viable, given some tuning towards the specific purpose.
 
 As this method has performed fairly well we wanted to extend it in two specific ways, presented in the following two sections.  
 
+
 \section{No Restriction on Time to Maturity} \label{sec:no_restric}
-The first extension is to stop restricting the time to maturity to $0.1$. When removing this restriction we instead have approximately $27.000$ points which can be split into training, validation and test set. In \autoref{Figures:Figures/Pictures/Application2/Prices2.png} these points are illustrated. 
+The first extension is to stop restricting the time to maturity to $0.1$. When removing this restriction we instead have approximately $27.000$ points which can be split into training-, validation-, and test set. In \autoref{Figures:Figures/Pictures/Application2/Prices2.png} these points are illustrated. 
 
 \imgfig[0.6]{Figures/Pictures/Application2/Prices2.png}{Option Prices for GOOG for $S_t = 100$.}
 
-In \autoref{Figures:Figures/Pictures/Application2/Prices2.png} we see, as we did in \autoref{Figures:Figures/Pictures/Application2/Prices.png}, that the option prices are approximately $0$ OTM and again increase the further ITM we get, when being close to maturity. However, the difference between the two is that in \autoref{Figures:Figures/Pictures/Application2/Prices2.png} we observe that the further from maturity time you get the earlier the prices starts to increase. For example, at time to maturity at $1.2$ the prices already starts to increase above $0$ at a strike price of $175$. The reason for this is that as mentioned before, when the option is OTM a potential investor pays for the possibility of the option becoming profitable in the future. Hence, when there is more than a year to maturity time there is a possibility of the option getting ITM before maturity. Another thing to notice about this data is that the further away from maturity the less points there are in the data set. This could indicate that the network will perform worse at approximating the behaviour of the data further from maturity. 
+In \autoref{Figures:Figures/Pictures/Application2/Prices2.png} we see, as we did in \autoref{Figures:Figures/Pictures/Application2/Prices.png}, that the option prices are approximately $0$ OTM and again increase the further ITM we get, when close to maturity. However, the difference between the two is that in \autoref{Figures:Figures/Pictures/Application2/Prices2.png} we observe that the further from maturity time you get, the more the prices increase for options OTM. For example, at time to maturity $1.2$ the prices already starts to increase above $0$ at a strike price of $175$. The reason for this is that as mentioned before, when the option is OTM a potential investor pays for the possibility of the option becoming profitable in the future. Hence, when there is more than a year to maturity time there is a possibility of the option getting ITM before maturity. Another thing to notice about this data is that the further away from maturity the less points there are in the data set. This could indicate that the network will perform worse at approximating the behaviour of the data further from maturity. 
 
-Again, we train the neural network on the training set, which is now more than twice as large as before, and use the validation set to look for indications of overfitting. Again, there are no indication of overfitting in either the MSE, MAE or MAPE presented in \autoref{Figures:Figures/Pictures/Application2/fejl_C2.pdf}.
+Again, we train the neural network on the training set, which is now more than twice as large as before, and use the validation set to look for indications of overfitting. Again, there is no indication of overfitting in either the MSE, MAE or MAPE presented in \autoref{Figures:Figures/Pictures/Application2/fejl_C2.pdf}.
 
 \imgfig[1]{Figures/Pictures/Application2/fejl_C2.pdf}{MSE, MAE and MAPE on training- and validation set for GOOG on $1200$ epochs.}
 
-One should notice that the difference between \autoref{Figures:Figures/Pictures/Application2/fejl_C2.pdf} and the figures presented in \autoref{Ch.5} and \autoref{Figures:Figures/Pictures/Application2/fejl_C.pdf} is that the errors of the test set is well above that of the validation set. This could indicate that the network is too simple to describe the price function, that is underfitting is occurring. Furthermore, we again see that even though the MSE and MAE are relatively small the MAPE is relatively high. This can also be seen when we evaluate the networks performance on the test data which results in the MSE, MAE and MAPE presented in \autoref{Table:NN22}.
+One should notice that the difference between \autoref{Figures:Figures/Pictures/Application2/fejl_C2.pdf} and \autoref{Figures:Figures/Pictures/Application2/fejl_C.pdf} is that the errors of the training set is well above that of the validation set. This could indicate that the neural network is too simple to describe the option pricing function, hence it is underfitting. Furthermore, we again see that even though the MSE and MAE are relatively small the MAPE is relatively high. This can also be seen when we evaluate the network's performance on the test set which results in the MSE, MAE and MAPE presented in \autoref{Table:NN22}.
 
 \begin{table}[H]
     \centering
@@ -56,21 +58,21 @@ One should notice that the difference between \autoref{Figures:Figures/Pictures/
         MAE  &  0.2411\\ \hline
         MAPE &  10.8074  \%\\ 
     \end{tabular}}
-    \caption{MSE, MAE and MAPE for the test data set.}
+    \caption{MSE, MAE and MAPE for the test set.}
     \label{Table:NN22}
 \end{table}
 
-In \autoref{Table:NN22} we see a worse performance than the network presented earlier in this chapter in terms of the MSE and MAE (see \autoref{Table:NN21}). However, the MAPE is very similar, which could be due the to higher prices further from maturity. Moreover, when looking closely at the option price surface generated by the network, \autoref{Figures:Figures/Pictures/Application2/C_surf2.png}, one can observe that the surface is not as smooth further from maturity, which is probably caused by the lack of training points here. 
+In \autoref{Table:NN22} we see a worse performance than the network presented earlier in this chapter in terms of the MSE and MAE (see \autoref{Table:NN21}). However, the MAPE is very similar, which could be due to the higher prices further from maturity. Moreover, when looking closely at the option price surface generated by the network, \autoref{Figures:Figures/Pictures/Application2/C_surf2.png}, one can observe that the surface is not as smooth further from maturity, which is probably caused by the lack of training points here. This lack of points far from maturity time could also explain the larger error seen in \autoref{Table:NN22}.
 
-\imgfig[0.6]{Figures/Pictures/Application2/C_surf2.png}{Option Price surface from neural network with test data set (orange points).}
+\imgfig[0.6]{Figures/Pictures/Application2/C_surf2.png}{Option price surface from neural network with test set (orange points).}
 
-Since the data set is different, the training-, validation- and test set differ from those formerly used in the analysis of GOOG, it is not possible to evaluate the performance of the same $100$ random points from the test set. Hence the performance of this method, will be based upon the error of $100$ other random points between the real option prices and the ones predicted by the network from the new test set. However, this will still give a satisfactory indication of how the network performs overall and ATM. The error between the real and calculated option prices of these $100$ random points can be seen in \autoref{Figures:Figures/Pictures/Application2/fejl_c2.pdf}. Furthermore, the mean percentage error of the $100$ random points is $10.06\%$. Comparing this with the results for the networks in \autoref{Sec.App:NN} and in the beginning of this chapter, we observe that this one performs better. 
+Comparing this with the results for the networks in the beginning of this chapter, we deduce that this one performs worse, but in term of general option pricing it still outperforms the method of using the risk-neutral density. 
 
 
 \section{Stock Price as Input Variable}\label{Sec.App2:Stock}
-The other extension of this method will be to include the stock price $S_{t}$ as an input in the neural network. As we saw that the network performed best when excluding the constraint on time to maturity, we will therefore proceed with this. When sorting the data we get approximately $190.000$ data points to split up in training, validation and test data sets, which naturally can not be plotted as the former data sets since it is now four dimensional. 
+The other extension of this method will be to include the stock price $S_{t}$ as an input in the neural network. As we saw that the network performed best when excluding the constraint on time to maturity, we will proceed with this. When sorting the data we get approximately $190.000$ data points to split up in training, validation and test data sets, which naturally can not be plotted as the former data sets since it is now four dimensional. 
 
-As before, we consider a neural network with the architecture determined in \autoref{Sec.App:NN}, with one crucial change, being the inclusion of stock prices as an input variable. As with both the strike price and time to maturity, we chose to normalise it. When training the network we observe some of the same behaviour for the MSE, MAE and MAPE as for the network in \autoref{sec:no_restric}. That is, no indication of overfitting, small values for MSE and MAE together with fairly large values of the MAPE, and some indication of underfitting. Hence, for further research it would yet again be a good idea to do a new tuning of the network specific for this data. The behaviour of the MSE, MAE and MAPE can be found in \autoref{Figures:Figures/Pictures/Application2/fejl_C32.pdf}. When evaluating the network on the test data we get a MSE, MAE and MAPE presented in \autoref{Table:NN32}. 
+As before, we consider a neural network with the architecture determined in \autoref{Sec.App:NN}, with one crucial change, being the inclusion of stock prices as an input variable. As with both the strike price and time to maturity, we choose to normalise it. When training the network we observe some of the same behaviour for the MSE, MAE and MAPE as for the network in \autoref{sec:no_restric}. That is, no indication of overfitting, small values for MSE and MAE together with fairly large values of the MAPE, and some indication of underfitting. Hence, for further research it would yet again be a good idea to do a new tuning of the network specific for this data. The behaviour of the MSE, MAE and MAPE during the training process can be found in \autoref{Figures:Figures/Pictures/Application2/fejl_C32.pdf}. When evaluating the network on the test set we get the MSE, MAE and MAPE presented in \autoref{Table:NN32}. 
 
 \begin{table}[H]
     \centering
@@ -79,26 +81,25 @@ As before, we consider a neural network with the architecture determined in \aut
         MAE  &  0.1851\\ \hline
         MAPE &  13.4144\%\\ 
     \end{tabular}}
-    \caption{MSE, MAE and MAPE for the test data set.}
+    \caption{MSE, MAE and MAPE for the test set.}
     \label{Table:NN32}
 \end{table}
 
-In \autoref{Table:NN32} the MAPE indicates a worse performance compared with the two former networks in this chapter, which gave a MAPE at approximately $10\%$ each. However, the mean percentage error of $100$ random points from the test set is $7.70\%$. Hence, indicating that this network is the one performing the best comparing the three. 
+In \autoref{Table:NN32} the MAPE indicates a worse performance compared with the two former networks in this chapter, which gave a MAPE at approximately $10\%$ each.
 
-Wanting to compare the two methods of using either the risk-neutral density or a neural network for predicting option prices, we look at their mean percentage error for the $100$ random points. Overall this reveals that the neural network for the option pricing function performed significantly better, which could be because this method uses fewer approximation methods. For a quick summary of the different mean percentage errors, see \autoref{Tab:App:Conclusion}. As seen in \autoref{Sec.App:Calculating_Option_Prices}, the results of using the risk-neutral measure methodology did not perform very well overall. Comparing this to the neural networks which computed the option prices directly, we observe a clear best performing neural network according to the $100$ random points. The best performing neural network is the neural network for option prices which has the stock price as an input, beating the other neural networks in overall performance. 
+Overall this reveals that the neural network for the option pricing function performed significantly better than when using the risk-neutral density, which could be because this method uses fewer numerical approximation methods back-to-back. For a quick summary of the different MAPEs, see \autoref{Tab:App:Conclusion}. As seen in \autoref{Sec.App:Calculating_Option_Prices}, the results of using the risk-neutral density did not perform very well overall. Comparing this to the neural networks which computed the option prices directly, we observe a clear best performing neural network. The best performing neural network is the neural network for option prices which does not have the stock price as an input and has the restriction on the time to maturity, beating the other neural networks in overall performance. 
 
 \begin{table}[H]
     \centering
     \begin{tabular}{c|c}
-        Neural Network \# & Mean percentage error for 100 random points \\ \hline
-        1 &  $305.6676\%$ \\\hline
-        2 &  $8.0373\%$ \\\hline
-        3 & $10.0605\%$  \\\hline
-        4 & $7.6985\%$ 
+        Neural Network \# & MAPE\\ \hline
+        1 & $305.6676\%$ \\\hline
+        2 & $10.5423\%$ \\\hline
+        3 & $10.8074\%$  \\\hline
+        4 & $13.4144\%$ 
     \end{tabular}
-    \caption{1: Neural network for implied volatility (see \autoref{Ch.5}). 2: Neural network for option prices with $\tau\leq0.1$ (see beginning of \autoref{Ch:app2}). 3: Neural network with no restriction on time to maturity (see \autoref{sec:no_restric}). 4: Neural network for option prices with no restriction on time to maturity, as well as stock prices as an input variable (see \autoref{Sec.App2:Stock}).}
+    \caption{1: Neural network for implied volatility function (see \autoref{Ch.5}). 2: Neural network for option prices with $\tau\leq0.1$ (see beginning of \autoref{Ch:app2}). 3: Neural network with no restriction on time to maturity (see \autoref{sec:no_restric}). 4: Neural network for option pricing function with no restriction on time to maturity, as well as stock prices as an input variable (see \autoref{Sec.App2:Stock}).}
     \label{Tab:App:Conclusion}
 \end{table}
 
-There are of course different drawbacks on the two method used for option pricing and the different ways of constructing the neural networks, which in the discussion will be elaborated further on. 
-
+There are of course different drawbacks of the two methods used for option pricing and the different ways of constructing the neural networks, which in the discussion will be elaborated further on.
